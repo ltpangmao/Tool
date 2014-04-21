@@ -1,1 +1,0 @@
-INDEX VERSION 1.126+/Users/litong30/research/Trento/Git/Tool/.metadata/.plugins/org.eclipse.jdt.core
