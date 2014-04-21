@@ -15,7 +15,7 @@ import javax.script.ScriptEngineManager;
 public class TryOut {
 
 	public static void main(String[] args) throws Throwable {
-
+//finally...
 //		String refine_rule = "dlv/dlv -silent -nofacts dlv/rules/sec_goal_ownership.rule dlv/models/temp_fact_app.dl dlv/models/asset_model.dl dlv/models/req_application_model.dl";
 
 		//draw pdf figure for the corresponding graph
