@@ -63,7 +63,7 @@ public class ControlPanel {
 		String command = "";
 		do {
 			System.out
-					.println("\nEnter the number of the task you want to execute\n"
+					.println("\nEnter the number of the task you want to\n"
 							+ "0) import selected requirement model from text (overwrite the previous one)\n"
 							+ "		0a) business layer\n"
 							+ "		0b) application layer\n"
