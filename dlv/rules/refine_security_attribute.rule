@@ -1,0 +1,13 @@
+%auxiliary rule
+non_leaf(R1) :- and_refine(R2, R1).
+non_leaf(R1) :- refine(R2, R1).
+non_leaf(R1) :- operationalize(R2, R1).
+non_leaf(R1) :- make(R2, R1).
+non_leaf(R1) :- help(R2, R1).
+non_leaf(R1) :- break(R2, R1).
+non_leaf(R1) :- hurt(R2, R1).
+non_leaf(R1) :- support(R2, R1).
+
+% if the isa relation is also applicable to other types of elements, then the rule need to restrict the type to security attribute
+and_refined_sec_goal(IMP, SA2, AS, INT, SG) :- has_properties(SG, IMP, SA1, AS, INT), isa(SA2, SA1), not non_leaf(SG), sec_goal(SG), SA1<>SA2.
+

@@ -1,0 +1,24 @@
+% a list of facts that exist in different layers. This could be imported from certain model, such as asset models. Here we harden the facts about these model here rather than importing them.
+
+% business layer asset model
+part_of(energy_production_data, customer_information).
+part_of(customer_personal_information, customer_information).
+part_of(energy_consumption_data, customer_information).
+part_of(water_consumption_data, energy_consumption_data).
+part_of(electronic_consumption_data, energy_consumption_data).
+%asset(water_consumption_data).
+
+
+
+% security attribute model
+isa(confidentiality, security).
+isa(integrity, security).
+isa(availability, security).
+isa(data_confidentiality, confidentiality).
+isa(service_integrity, integrity).
+isa(data_integrity, integrity).
+isa(application_integrity, integrity).
+isa(hardware_integrity, integrity).
+isa(service_availability, availability).
+isa(application_availability, availability).
+isa(hardware_availability, availability).

@@ -1,0 +1,111 @@
+% Auxiliary rule
+%interval(G) :- goal(G).
+%interval(T) :- task(T).
+
+% Auxiliary rules --- non-leaf
+non_leaf(R1) :- and_refine(R2, R1).
+non_leaf(R1) :- refine(R2, R1).
+non_leaf(R1) :- operationalize(R2, R1).
+%non_leaf(R1) :- make(R2, R1).
+%non_leaf(R1) :- help(R2, R1).
+%non_leaf(R1) :- break(R2, R1).
+%non_leaf(R1) :- hurt(R2, R1).
+%non_leaf(R1) :- support(R2, R1).
+
+
+% Auxiliary rules --- descendent 
+is_descendent(R1, R2) :- and_refine(R1, R2).
+is_descendent(R1, R2) :- refine(R2, R1).
+is_descendent(R1, R2) :- operationalize(R2, R1).
+is_descendent(R1, R2) :- is_descendent(R1, R2), is_descendent(R2, R3).
+
+
+%Asset Type Applicability rules
+is_not_applicable(SG) :- sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, _), not data(AS).
+is_not_applicable(SG) :- sec_goal(SG), has_properties(SG, _, data_integrity, AS, _), not data(AS).
+is_not_applicable(SG) :- sec_goal(SG), has_properties(SG, _, service_integrity, AS, _), not service(AS).
+is_not_applicable(SG) :- sec_goal(SG), has_properties(SG, _, service_availability, AS, _), not service(AS).
+is_not_applicable(SG) :- sec_goal(SG), has_properties(SG, _, application_integrity, AS, _), not application(AS).
+is_not_applicable(SG) :- sec_goal(SG), has_properties(SG, _, application_availability, AS, _), not application(AS).
+is_not_applicable(SG) :- sec_goal(SG), has_properties(SG, _, hardware_integrity, AS, _), not hardware(AS).
+is_not_applicable(SG) :- sec_goal(SG), has_properties(SG, _, hardware_availability, AS, _), not hardware(AS).
+
+
+%Critical Security Goal Identification rules, we consider only leaf security goals in mannual analysis. We put the leaf constraints here to maximally reuse the inference rules.
+is_critical(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, extreme_high).%, not non_leaf(SG).
+is_critical(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, high).%, not non_leaf(SG).
+non_deterministic(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, medium), not is_critical(SG).%, not non_leaf(SG).
+
+%these predicates are particularly used to support the automatic refinement analysis
+%is_i_critical(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, extreme_high).
+%is_i_critical(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, high).
+
+
+
+% Risk Level Analysis rules
+risk_level(SG, low) :- sec_goal(SG), has_properties(SG, very_low, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 3).
+risk_level(SG, low) :- sec_goal(SG), has_properties(SG, very_low, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 4).
+risk_level(SG, low) :- sec_goal(SG), has_properties(SG, very_low, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 3).
+risk_level(SG, low) :- sec_goal(SG), has_properties(SG, very_low, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 4).
+risk_level(SG, low) :- sec_goal(SG), has_properties(SG, very_low, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 5).
+risk_level(SG, low) :- sec_goal(SG), has_properties(SG, low, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 5).
+risk_level(SG, medium) :- sec_goal(SG), has_properties(SG, very_low, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 1).
+risk_level(SG, medium) :- sec_goal(SG), has_properties(SG, very_low, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 2).
+risk_level(SG, medium) :- sec_goal(SG), has_properties(SG, low, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 2).
+risk_level(SG, medium) :- sec_goal(SG), has_properties(SG, low, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 3).
+risk_level(SG, medium) :- sec_goal(SG), has_properties(SG, low, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 4).
+risk_level(SG, medium) :- sec_goal(SG), has_properties(SG, medium, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 3).
+risk_level(SG, medium) :- sec_goal(SG), has_properties(SG, medium, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 4).
+risk_level(SG, medium) :- sec_goal(SG), has_properties(SG, medium, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 5).
+risk_level(SG, medium) :- sec_goal(SG), has_properties(SG, high, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 4).
+risk_level(SG, medium) :- sec_goal(SG), has_properties(SG, high, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 5).
+risk_level(SG, high) :- sec_goal(SG), has_properties(SG, low, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 1).
+risk_level(SG, high) :- sec_goal(SG), has_properties(SG, medium, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 1).
+risk_level(SG, high) :- sec_goal(SG), has_properties(SG, medium, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 2).
+risk_level(SG, high) :- sec_goal(SG), has_properties(SG, high, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 1).
+risk_level(SG, high) :- sec_goal(SG), has_properties(SG, high, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 2).
+risk_level(SG, high) :- sec_goal(SG), has_properties(SG, high, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 3).
+risk_level(SG, high) :- sec_goal(SG), has_properties(SG, very_high, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 4).
+risk_level(SG, high) :- sec_goal(SG), has_properties(SG, very_high, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 5).
+risk_level(SG, extreme_high) :- sec_goal(SG), has_properties(SG, very_high, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 1).
+risk_level(SG, extreme_high) :- sec_goal(SG), has_properties(SG, very_high, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 2).
+risk_level(SG, extreme_high) :- sec_goal(SG), has_properties(SG, very_high, SA, AS, T), has(A1, SG), poss_impair(A2, SG), trust(A1, A2, 3).
+
+% Basic rules for self-trust
+trust(A, A, 5) :- actor(A).
+
+% Trust transfer rules
+trust(A1, A3, 1) :- trust(A1, A2, 1), trust(A2, A3, 1).
+trust(A1, A3, 1) :- trust(A1, A2, 1), trust(A2, A3, 2).
+trust(A1, A3, 1) :- trust(A1, A2, 1), trust(A2, A3, 3).
+trust(A1, A3, 1) :- trust(A1, A2, 1), trust(A2, A3, 4).
+trust(A1, A3, 1) :- trust(A1, A2, 1), trust(A2, A3, 5).
+trust(A1, A3, 1) :- trust(A1, A2, 2), trust(A2, A3, 1).
+trust(A1, A3, 1) :- trust(A1, A2, 2), trust(A2, A3, 2).
+trust(A1, A3, 1) :- trust(A1, A2, 2), trust(A2, A3, 3).
+trust(A1, A3, 1) :- trust(A1, A2, 2), trust(A2, A3, 4).
+trust(A1, A3, 2) :- trust(A1, A2, 2), trust(A2, A3, 5).
+trust(A1, A3, 1) :- trust(A1, A2, 3), trust(A2, A3, 1).
+trust(A1, A3, 1) :- trust(A1, A2, 3), trust(A2, A3, 2).
+trust(A1, A3, 1) :- trust(A1, A2, 3), trust(A2, A3, 3).
+trust(A1, A3, 2) :- trust(A1, A2, 3), trust(A2, A3, 4).
+trust(A1, A3, 3) :- trust(A1, A2, 3), trust(A2, A3, 5).
+trust(A1, A3, 1) :- trust(A1, A2, 4), trust(A2, A3, 1).
+trust(A1, A3, 1) :- trust(A1, A2, 4), trust(A2, A3, 2).
+trust(A1, A3, 2) :- trust(A1, A2, 4), trust(A2, A3, 3).
+trust(A1, A3, 3) :- trust(A1, A2, 4), trust(A2, A3, 4).
+trust(A1, A3, 4) :- trust(A1, A2, 4), trust(A2, A3, 5).
+trust(A1, A3, 1) :- trust(A1, A2, 5), trust(A2, A3, 1).
+trust(A1, A3, 2) :- trust(A1, A2, 5), trust(A2, A3, 2).
+trust(A1, A3, 3) :- trust(A1, A2, 5), trust(A2, A3, 3).
+trust(A1, A3, 4) :- trust(A1, A2, 5), trust(A2, A3, 4).
+trust(A1, A3, 5) :- trust(A1, A2, 5), trust(A2, A3, 5).
+
+
+
+% Temporarily add these rules to make sure all refinements of one critical security goals are critcial.
+%poss_impair(A, SG2) :- poss_impair(A, SG1), has_properties(SG1, IMP, SA, AS1, T), has_properties(SG2, IMP, SA, AS2, T), part_of(AS2, AS1).
+%is_applicable(SG2) :- is_applicable(SG1), has_properties(SG1, IMP, SA, AS1, T), has_properties(SG2, IMP, SA, AS2, T), part_of(AS2, AS1).
+
+% Temporarily add this to disable non_deterministic security goals. 
+is_critical(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, medium).%, not non_leaf(SG).

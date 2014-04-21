@@ -1,0 +1,17 @@
+
+
+% operationalization rule
+make(SM, SG) :- s_make(SM, SA), sec_goal(SG), has_properties(SG, IMP, SA, AS, T), is_critical(SG).
+help(SM, SG) :- s_help(SM, SA), sec_goal(SG), has_properties(SG, IMP, SA, AS, T), is_critical(SG).
+
+
+% selection rule
+satisfied(SG) :- make(SM, SG).
+satisfied(SG) :- help(SM, SG).
+
+
+%make(encryption,medium_data_integrity_energy_consumption_data_measure_current_load_info) v %make(auditing,medium_data_integrity_energy_consumption_data_measure_current_load_info) v
+%help(access_control,medium_data_integrity_energy_consumption_data_measure_current_load_info).
+
+%make(encryption,medium_data_integrity_energy_consumption_data_communicate_with_smart_meters) v %make(auditing,medium_data_integrity_energy_consumption_data_communicate_with_smart_meters) v %help(access_control,medium_data_integrity_energy_consumption_data_communicate_with_smart_meters).
+

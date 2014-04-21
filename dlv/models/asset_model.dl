@@ -1,0 +1,31 @@
+% a list of facts that exist in different layers. This could be imported from certain model, such as asset models. Here we harden the facts about these model here rather than importing them.
+
+% data asset
+data(customer_information).
+data(energy_production_data).
+data(customer_personal_information).
+data(energy_consumption_data).
+data(water_consumption_data).
+data(electronic_consumption_data).
+
+% service (asset)
+service(G) :- goal(G).
+service(T) :- task(T).
+
+% application asset
+application(smart_meter_application).
+application(home_energy_management_system).
+application(smart_appliance_application).
+application(energy_supplier_server_application).
+application(energy_supplier_database).
+
+% hardware asset
+
+
+
+% part-of relations between data asset
+part_of(energy_production_data,customer_information).
+part_of(customer_personal_information,customer_information).
+part_of(energy_consumption_data,customer_information).
+part_of(water_consumption_data,energy_consumption_data).
+part_of(electronic_consumption_data,energy_consumption_data).

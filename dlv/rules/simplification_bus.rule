@@ -1,0 +1,27 @@
+% Temporarily adding facts(also some rules), which ideally would be extracted from particular models
+
+
+
+% Auxiliary rules (leaf & descendent) --- see the simplification_general file.
+
+%Critical Security Goal Identification rules --- see the simplification_general file.
+
+%Asset Type Applicability rules --- see the simplification_general file.
+
+
+%Business layer applicability rules
+is_applicable(SG) :- input_of(AS, T), sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T), not is_not_applicable(SG).
+
+is_applicable(SG) :- output_of(AS, T), sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T), not is_not_applicable(SG).
+is_applicable(SG) :- output_of(AS, T), sec_goal(SG), has_properties(SG, _, data_integrity, AS, T), not is_not_applicable(SG).
+
+is_applicable(SG) :- transferred_by(AS, T), sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T), not is_not_applicable(SG).
+is_applicable(SG) :- transferred_by(AS, T), sec_goal(SG), has_properties(SG, _, data_integrity, AS, T), not is_not_applicable(SG).
+
+is_applicable(SG) :- sec_goal(SG), has_properties(SG, _, service_integrity, AS, T), is_descendent(T, AS), not is_not_applicable(SG).
+is_applicable(SG) :- sec_goal(SG), has_properties(SG, _, service_availability, AS, T), is_descendent(T, AS), not is_not_applicable(SG).
+
+
+
+%Business layer potential threat analysis rules. We suppose only the dependency causes potential damage.
+poss_impair(A1, SG) :- sec_goal(SG), has_properties(SG, _, SA, AS, T), has(A1, T), not depend(A1, A2, T), actor(A2).

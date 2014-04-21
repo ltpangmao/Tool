@@ -1,0 +1,11 @@
+% Auxiliary non-root
+non_root(R2) :- and_refine(R2, R1).
+non_root(R2) :- refine(R2, R1).
+non_root(R2) :- operationalize(R2, R1).
+
+% Auxiliary rules --- security goal ownership.
+% As we keep the two models separately, rather than with in the same boundary, we should identify the ownership of the top level security goal.
+has(A, SG) :- has(A, R), sec_goal(SG), has_properties(SG, _, _, _, R), not non_root(SG), not application(A), not hardware(A).
+has(A, SG2) :- has(A, SG1), and_refine(SG2, SG1), sec_goal(SG1), sec_goal(SG2).
+has(A, SG2) :- has(A, SG1), refine(SG2, SG1), sec_goal(SG1), sec_goal(SG2).
+

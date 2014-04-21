@@ -1,0 +1,63 @@
+
+
+% Auxiliary rule
+%interval(G) :- goal(G).
+%interval(T) :- task(T).
+
+% General rules
+non_leaf(R1) :- and_refine(R2, R1).
+non_leaf(R1) :- refine(R2, R1).
+non_leaf(R1) :- operationalize(R2, R1).
+non_leaf(R1) :- make(R2, R1).
+non_leaf(R1) :- help(R2, R1).
+non_leaf(R1) :- break(R2, R1).
+non_leaf(R1) :- hurt(R2, R1).
+non_leaf(R1) :- support(R2, R1).
+
+%Critical identification rules
+is_critical(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, high).
+is_critical(SG) :- sec_goal(SG), has_properties(SG, high, SA, AS, T), is_applicable(SG).
+is_critical(SG) :- threat_level(SG, medium), sec_goal(SG), has_properties(SG, medium, SA, AS, T), is_applicable(SG).
+
+%Business layer applicability rules
+is_applicable(SG) :- input_of(AS, T), sec_goal(SG), has_properties(SG, IMP, data_confidentiality, AS, T).
+
+is_applicable(SG) :- output_of(AS, T), sec_goal(SG), has_properties(SG, IMP, data_confidentiality, AS, T).
+is_applicable(SG) :- output_of(AS, T), sec_goal(SG), has_properties(SG, IMP, data_integrity, AS, T).
+
+is_applicable(SG) :- transferred_by(AS, T), sec_goal(SG), has_properties(SG, IMP, data_confidentiality, AS, T).
+is_applicable(SG) :- transferred_by(AS, T), sec_goal(SG), has_properties(SG, IMP, data_integrity, AS, T).
+
+
+is_applicable(SG) :- sec_goal(SG), has_properties(SG, IMP, service_confidentiality, AS, T).
+is_applicable(SG) :- sec_goal(SG), has_properties(SG, IMP, service_integrity, AS, T).
+is_applicable(SG) :- sec_goal(SG), has_properties(SG, IMP, service_availability, AS, T).
+
+%Business layer threat rules
+% only depended tasks may have an untrusted executor.
+untrust_dependency(T) :- depend(A1, A2, T), not trust(A1, A2, T).
+% rules
+threat_level(SG, high) :- sec_goal(SG), has_properties(SG, IMP, service_confidentiality, AS, T), untrust_dependency(T), not ac_before(T), not non_leaf(SG).
+threat_level(SG, high) :- sec_goal(SG), has_properties(SG, IMP, data_confidentiality, AS, T), untrust_dependency(T), not ac_before(T), not non_leaf(SG).
+threat_level(SG, medium) :- sec_goal(SG), has_properties(SG, IMP, service_confidentiality, AS, T), not untrust_dependency(T), not ac_before(T), not non_leaf(SG).
+threat_level(SG, medium) :- sec_goal(SG), has_properties(SG, IMP, data_confidentiality, AS, T), not untrust_dependency(T), not ac_before(T), not non_leaf(SG).
+threat_level(SG, medium) :- sec_goal(SG), has_properties(SG, IMP, service_confidentiality, AS, T), untrust_dependency(T), ac_before(T), not non_leaf(SG).
+threat_level(SG, medium) :- sec_goal(SG), has_properties(SG, IMP, data_confidentiality, AS, T), untrust_dependency(T), ac_before(T), not non_leaf(SG).
+threat_level(SG, low) :- sec_goal(SG), has_properties(SG, IMP, service_confidentiality, AS, T), not untrust_dependency(T), ac_before(T), not non_leaf(SG).
+threat_level(SG, low) :- sec_goal(SG), has_properties(SG, IMP, data_confidentiality, AS, T), not untrust_dependency(T), ac_before(T), not non_leaf(SG).
+
+threat_level(SG, high) :- sec_goal(SG), has_properties(SG, IMP, service_integrity, AS, T), untrust_dependency(T), not audit_after(T), not non_leaf(SG).
+threat_level(SG, high) :- sec_goal(SG), has_properties(SG, IMP, data_integrity, AS, T), untrust_dependency(T), not audit_after(T), not non_leaf(SG).
+threat_level(SG, medium) :- sec_goal(SG), has_properties(SG, IMP, service_integrity, AS, T), not untrust_dependency(T), not audit_after(T), not non_leaf(SG).
+threat_level(SG, medium) :- sec_goal(SG), has_properties(SG, IMP, data_integrity, AS, T), not untrust_dependency(T), not audit_after(T), not non_leaf(SG).
+threat_level(SG, medium) :- sec_goal(SG), has_properties(SG, IMP, service_integrity, AS, T), untrust_dependency(T), audit_after(T), not non_leaf(SG).
+threat_level(SG, medium) :- sec_goal(SG), has_properties(SG, IMP, data_integrity, AS, T), untrust_dependency(T), audit_after(T), not non_leaf(SG).
+threat_level(SG, low) :- sec_goal(SG), has_properties(SG, IMP, service_integrity, AS, T), not untrust_dependency(T), audit_after(T), not non_leaf(SG).
+threat_level(SG, low) :- sec_goal(SG), has_properties(SG, IMP, data_integrity, AS, T), not untrust_dependency(T), audit_after(T), not non_leaf(SG).
+
+threat_level(SG, high) :- sec_goal(SG), has_properties(SG, IMP, service_availability, AS, T), untrust_dependency(T), not alternative(T), not non_leaf(SG).
+threat_level(SG, medium) :- sec_goal(SG), has_properties(SG, IMP, service_availability, AS, T), not untrust_dependency(T), not alternative(T), not non_leaf(SG).
+threat_level(SG, medium) :- sec_goal(SG), has_properties(SG, IMP, service_availability, AS, T), untrust_dependency(T), alternative(T), not non_leaf(SG).
+threat_level(SG, low) :- sec_goal(SG), has_properties(SG, IMP, service_availability, AS, T), not untrust_dependency(T), alternative(T), not non_leaf(SG).
+
+

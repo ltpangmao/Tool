@@ -1,0 +1,29 @@
+%facts about non one-to-one mapping between tasks and business process activity
+mapped_to(energy_supplier_communicates_with_smart_meter, send_energy_usage_data).
+mapped_to(energy_supplier_communicates_with_smart_meter, receive_energy_usage_data).
+mapped_to(energy_supplier_communicates_with_smart_meter, send_measure_request_to_smart_meter).
+mapped_to(energy_supplier_communicates_with_smart_meter, receive_request).
+
+% addtional rules to facilitate inference
+transferred_by(AS, T2) :- transferred_by(AS, T1), mapped_to(T2, T1).
+output_of(AS, T2) :- output_of(AS, T1), mapped_to(T2, T1).
+input_of(AS, T2) :- input_of(AS, T1), mapped_to(T2, T1).
+
+
+
+% facts of business process model
+% here we only consider the name of each object, and ignore its type. 
+% asset related facts
+output_of(energy_consumption_data, measure_energy_consumption).
+transferred_by(energy_consumption_data, send_energy_usage_data).
+
+
+
+
+
+
+%other facts
+%transferred_by(measure_request, send_measure_request_to_smart_meter).
+
+%security situation check
+% ac_before(measure_current_load_info).

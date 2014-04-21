@@ -1,0 +1,32 @@
+% Temporarily adding facts(also some rules), which ideally would be extracted from particular models
+
+
+
+% Auxiliary rules (leaf & descendent) --- see the simplification_general file.
+
+%Critical Security Goal Identification rules --- see the simplification_general file.
+
+%Asset Type Applicability rules --- see the simplification_general file.
+
+
+%Application layer applicability rules
+
+is_applicable(SG) :- call(T1, T2, _, AS), sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T2), not is_not_applicable(SG).
+is_applicable(SG) :- call(T1, T2, _, AS), sec_goal(SG), has_properties(SG, _, data_integrity, AS, T2), not is_not_applicable(SG).
+
+is_applicable(SG) :- call(T1, T2, _, AS), sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T1), not is_not_applicable(SG).
+
+is_applicable(SG) :- sec_goal(SG), has_properties(SG, _, application_integrity, AS, T1), has(AS, T1), not is_not_applicable(SG).
+is_applicable(SG) :- sec_goal(SG), has_properties(SG, _, application_availability, AS, T1), has(AS, T1), not is_not_applicable(SG).
+
+%Application layer potential threat analysis rules. We suppose only the dependency causes potential damage.
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T1), call(T2, T1, _, AS), has(APP, T2), use(A, APP). 
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T), has(APP, T), use(A, APP). 
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_integrity, AS, T), has(APP, T), use(A, APP). 
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T), has(APP, T), maintain(A, APP). 
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_integrity, AS, T), has(APP, T), maintain(A, APP).
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, application_integrity, APP, T), maintain(A, APP).
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T), has(APP, T), own(A, APP).
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_integrity, AS, T), has(APP, T), own(A, APP).
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, application_integrity, APP, T), own(A, APP).
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, application_availability, APP, T), own(A, APP).

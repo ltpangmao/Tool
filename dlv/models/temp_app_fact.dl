@@ -1,0 +1,6 @@
+% Temporarily adding facts(also some rules), which ideally are derived from the cross-layer transformation. 
+% However, this information is only available at the upper-layer model, rather than the lower-layer model. i.e. implied in the lower-layer, so I have to mannualy add them into this file. Because the reasonning is done within one individual model. Or I could pass all actors in the upper-layer to the lower-layer, which is still tagged as the layer it belongs to.
+
+has(energy_supplier,high_application_integrity_smart_meter_application_support_cryptographic_control).
+has(energy_supplier,high_application_availability_smart_meter_application_support_cryptographic_control).
+has(energy_supplier,high_data_confidentiality_energy_consumption_data_energy_supplier_communicates_with_smart_meter).

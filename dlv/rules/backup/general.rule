@@ -1,0 +1,12 @@
+%auxiliary rule
+non_leaf(R1) :- and_refine(R2, R1).
+non_leaf(R1) :- refine(R2, R1).
+non_leaf(R1) :- operationalize(R2, R1).
+non_leaf(R1) :- make(R2, R1).
+non_leaf(R1) :- help(R2, R1).
+non_leaf(R1) :- break(R2, R1).
+non_leaf(R1) :- hurt(R2, R1).
+non_leaf(R1) :- support(R2, R1).
+
+
+
