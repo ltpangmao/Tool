@@ -19,5 +19,3 @@ transferred_by(energy_consumption_data, send_energy_usage_data).
 
 %security situation check
 % ac_before(measure_current_load_info).
-
-% test

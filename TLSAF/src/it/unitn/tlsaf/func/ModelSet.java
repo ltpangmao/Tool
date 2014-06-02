@@ -3,8 +3,10 @@ package it.unitn.tlsaf.func;
 import java.io.BufferedReader;
 import java.io.Console;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -14,6 +16,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -29,34 +33,43 @@ import it.unitn.tlsaf.ds.RequirementLink;
 import it.unitn.tlsaf.ds.SecurityGoal;
 
 /**
- * Start point, choose desired operations
+ * A collection of models that are involved in our analysis
  * 
  * @author litong30
  */
-public class ControlPanel {
+public class ModelSet {
+	
 	RequirementGraph req_bus_model;
 	RequirementGraph req_app_model;
-	RequirementGraph req_inf_model;
+	RequirementGraph req_phy_model;
 	
 	ActorAssociationGraph actor_model;
 
 	// Graph asset_model = new Graph(InfoEnum.ModelCategory.REQUIREMENT.name());
 	// Graph bp_model = new Graph(InfoEnum.ModelCategory.REQUIREMENT.name());
 
-	public ControlPanel() {
+	public ModelSet() {
 		super();
 		req_bus_model = new RequirementGraph(InfoEnum.ModelCategory.REQUIREMENT.name(),
 				InfoEnum.Layer.BUSINESS.name());
 		req_app_model = new RequirementGraph(InfoEnum.ModelCategory.REQUIREMENT.name(),
 				InfoEnum.Layer.APPLICATION.name());
-		req_inf_model = new RequirementGraph(InfoEnum.ModelCategory.REQUIREMENT.name(),
+		req_phy_model = new RequirementGraph(InfoEnum.ModelCategory.REQUIREMENT.name(),
 				InfoEnum.Layer.PHYSICAL.name());
 		
 		actor_model = new ActorAssociationGraph(InfoEnum.ModelCategory.ACTOR.name());
 	}
+	
+	
 
+	
+	
+	
+	
+	//depleted...
+	/*
 	public static void main(String args[]) throws Throwable {
-		ControlPanel cp = new ControlPanel();
+		ModelSet cp = new ModelSet();
 
 		Scanner reader = new Scanner(System.in);
 		// get user input for a
@@ -223,8 +236,6 @@ public class ControlPanel {
 		} while (!command.equals("0"));
 
 	}
+	*/
 
-	static void print(Object s) {
-		System.out.println(s);
-	}
 }

@@ -15,19 +15,6 @@ isa(hardware_availability, availability).
 
 
 % contribution link: make/help(SM, SA)
-% business layer security model
-s_make(cryptographic_control,data_confidentiality).
-s_make(cryptographic_control,data_integrity).
-s_make(access_control,data_confidentiality).
-s_help(access_control,data_integrity).
-s_help(access_control,service_integrity).
-s_help(access_control,service_availability).
-s_make(auditing,data_integrity).
-s_make(auditing,service_integrity).
-s_help(auditing,service_availability).
-s_make(backup,service_availability).
-s_help(backup,service_integrity).
-
 
 
 % application layer security model
@@ -51,15 +38,3 @@ s_make(load_balancer, application_availability).
 
 
 
-% physical layer security model
-s_help(secure_office, data_confidentiality).
-s_help(secure_office, data_integrity).
-s_make(physical_entry_control, data_confidentiality).
-s_make(physical_entry_control, data_integrity).
-s_help(physical_entry_control, hardware_integrity).
-s_help(physical_entry_control, hardware_availability).
-s_help(monitor, hardware_integrity).
-s_help(monitor, hardware_availability).
-s_make(anti_tamper_protection, hardware_integrity).
-s_help(anti_tamper_protection, hardware_availability).
-s_make(ups, hardware_availability).

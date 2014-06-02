@@ -22,35 +22,8 @@ ex_and_refined_sec_goal(IMP, SA, AS, INT2, IMP, SA, AS, INT1) :- sec_goal(SG), h
 ex_and_refined_sec_goal(IMP, SA, AS2, INT, IMP, SA, AS1, INT) :- ex_and_refined_sec_goal(IMP, SA, AS1, INT, IMP, SA0, AS0, INT0), part_of(AS2, AS1).
 % low-level security attribute rules
 ex_and_refined_sec_goal(IMP, SA2, AS, INT, IMP, SA1, AS, INT) :- ex_and_refined_sec_goal(IMP, SA1, AS, INT, IMP, SA0, AS0, INT0), isa(SA2, SA1).
-% top interval rule.
+% low-level interval rule.
 ex_and_refined_sec_goal(IMP, SA, AS, INT2, IMP, SA, AS, INT1) :- ex_and_refined_sec_goal(IMP, SA, AS, INT1, IMP, SA0, AS0, INT0), and_refine(INT2, INT1).
 ex_and_refined_sec_goal(IMP, SA, AS, INT2, IMP, SA, AS, INT1) :- ex_and_refined_sec_goal(IMP, SA, AS, INT1, IMP, SA0, AS0, INT0), refine(INT2, INT1).
 ex_and_refined_sec_goal(IMP, SA, AS, INT2, IMP, SA, AS, INT1) :- ex_and_refined_sec_goal(IMP, SA, AS, INT1, IMP, SA0, AS0, INT0), operationalize(INT2, INT1).
 %auxiliary rule
-
-non_leaf(R1) :- and_refine(R2, R1).
-non_leaf(R1) :- refine(R2, R1).
-non_leaf(R1) :- operationalize(R2, R1).
-non_leaf(R1) :- make(R2, R1).
-non_leaf(R1) :- help(R2, R1).
-non_leaf(R1) :- break(R2, R1).
-non_leaf(R1) :- hurt(R2, R1).
-non_leaf(R1) :- support(R2, R1).
-
-% top asset rule
-ex_and_refined_sec_goal(IMP, SA, AS2, INT, IMP, SA, AS1, INT) :- sec_goal(SG), has_properties(SG, IMP, SA, AS1, INT), part_of(AS2, AS1), not non_leaf(SG).
-% top security attribute rule
-ex_and_refined_sec_goal(IMP, SA2, AS, INT, IMP, SA1, AS, INT) :- sec_goal(SG), has_properties(SG, IMP, SA1, AS, INT), isa(SA2, SA1), not non_leaf(SG).
-% top interval rule. Here is an assumption that, there is no alternative in the functional goal model, i.e. each node would have at most 1 refine relation. If the assumpition does not hold any more, we should change the rules here.
-ex_and_refined_sec_goal(IMP, SA, AS, INT2, IMP, SA, AS, INT1) :- sec_goal(SG), has_properties(SG, IMP, SA, AS, INT1), and_refine(INT2, INT1), not non_leaf(SG).
-ex_and_refined_sec_goal(IMP, SA, AS, INT2, IMP, SA, AS, INT1) :- sec_goal(SG), has_properties(SG, IMP, SA, AS, INT1), refine(INT2, INT1), not non_leaf(SG).
-ex_and_refined_sec_goal(IMP, SA, AS, INT2, IMP, SA, AS, INT1) :- sec_goal(SG), has_properties(SG, IMP, SA, AS, INT1), operationalize(INT2, INT1), not non_leaf(SG).
-
-%low-level asset rules
-ex_and_refined_sec_goal(IMP, SA, AS2, INT, IMP, SA, AS1, INT) :- ex_and_refined_sec_goal(IMP, SA, AS1, INT, IMP, SA0, AS0, INT0), part_of(AS2, AS1).
-% low-level security attribute rules
-ex_and_refined_sec_goal(IMP, SA2, AS, INT, IMP, SA1, AS, INT) :- ex_and_refined_sec_goal(IMP, SA1, AS, INT, IMP, SA0, AS0, INT0), isa(SA2, SA1).
-% top interval rule.
-ex_and_refined_sec_goal(IMP, SA, AS, INT2, IMP, SA, AS, INT1) :- ex_and_refined_sec_goal(IMP, SA, AS, INT1, IMP, SA0, AS0, INT0), and_refine(INT2, INT1).
-ex_and_refined_sec_goal(IMP, SA, AS, INT2, IMP, SA, AS, INT1) :- ex_and_refined_sec_goal(IMP, SA, AS, INT1, IMP, SA0, AS0, INT0), refine(INT2, INT1).
-ex_and_refined_sec_goal(IMP, SA, AS, INT2, IMP, SA, AS, INT1) :- ex_and_refined_sec_goal(IMP, SA, AS, INT1, IMP, SA0, AS0, INT0), operationalize(INT2, INT1).

@@ -11,6 +11,10 @@ public class RequirementElement implements Element{
 	private String remark = InfoEnum.ElementRemark.NORMAL.name(); //used for dealing with special cases
 	private LinkedList <RequirementLink> inLinks = new LinkedList<RequirementLink>();  //Current element is target
 	private LinkedList <RequirementLink> outLinks = new LinkedList<RequirementLink>(); //Current element is source
+	
+	// programming sugar...
+	public Actor owner = null;
+	public String owner_text = null;
 	//redundant variable
 	public LinkedList <RequirementLink> and_refine_links = new LinkedList<RequirementLink>();  //facilitate and-refinement
 	public LinkedList <RequirementLink> make_help_links = new LinkedList<RequirementLink>();  //facilitate operationalization

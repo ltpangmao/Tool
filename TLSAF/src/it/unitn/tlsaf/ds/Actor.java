@@ -8,18 +8,15 @@ public class Actor extends RequirementElement {
 
 	public Actor() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Actor(String name, String type, String layer) {
 		super(name, type, layer);
-		// TODO Auto-generated constructor stub
 	}
 
 	public Actor(String name, String type, String layer, LinkedList<RequirementLink> inLinks,
 			LinkedList<RequirementLink> outLinks) {
 		super(name, type, layer, inLinks, outLinks);
-		// TODO Auto-generated constructor stub
 	}
 
 	public LinkedList<RequirementElement> getOwnedElement() {

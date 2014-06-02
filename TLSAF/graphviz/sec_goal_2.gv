@@ -1,14 +1,17 @@
 digraph G {
 rankdir = BT;
 sg_2[shape=ellipse, fontname="Helvetica-Bold", style = filled, color=blue];
-sg_49[shape=ellipse, fontname="Helvetica-Bold", style = filled, color=blue];
-sg_61[shape=ellipse, fontname="Helvetica-Bold", style = filled, color=blue];
-sg_62[shape=ellipse, fontname="Helvetica-Bold", style = filled, color=blue];
-sg_63[shape=ellipse, fontname="Helvetica-Bold", style = filled, color = red];
-sg_64[shape=ellipse, fontname="Helvetica-Bold", style = filled, color = red];
-sg_49 -> sg_2[label="S", penwidth = 2.5, color=blue];
-sg_61 -> sg_49[label="A", penwidth = 2.5, color=blue];
-sg_62 -> sg_61[label="I", penwidth = 2.5, color=blue];
-sg_63 -> sg_62[label="I", penwidth = 2.5, color=blue];
-sg_64 -> sg_62[label="I", penwidth = 2.5, color=blue];
+sg_11[shape=ellipse, fontname="Helvetica-Bold", style = filled, color=blue];
+sg_19[shape=ellipse, fontname="Helvetica-Bold", style = filled, color=blue];
+sg_20[shape=ellipse, fontname="Helvetica-Bold", style = filled, color = red];
+sg_21[shape=ellipse, fontname="Helvetica-Bold", style = filled, color = red];
+sg_37[shape=ellipse, fontname="Helvetica-Bold", style = filled, color=blue];
+sg_38[shape=ellipse, fontname="Helvetica-Bold", style = filled, color = red];
+sg_39[shape=ellipse, fontname="Helvetica-Bold", style = filled, color = red];
+sg_19 -> sg_11[label="S", penwidth = 2.5, color=blue];
+sg_20 -> sg_19[label="I", penwidth = 2.5, color=blue];
+sg_21 -> sg_19[label="I", penwidth = 2.5, color=blue];
+sg_37 -> sg_2[label="S", penwidth = 2.5, color=blue];
+sg_38 -> sg_37[label="I", penwidth = 2.5, color=blue];
+sg_39 -> sg_37[label="I", penwidth = 2.5, color=blue];
 }

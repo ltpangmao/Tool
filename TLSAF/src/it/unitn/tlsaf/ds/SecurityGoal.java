@@ -12,29 +12,28 @@ public class SecurityGoal extends RequirementElement {
 	private String security_attribute;
 	private String interval;
 	private String importance;
-	// programming sugar...
-	public Actor owner = null;
+	
 	// for next layer duplication
+	// TODO: this should be remove later, er, or may be not....
 	public SecurityGoal next_layer_copy = null;
+	
 	// for best path generation
 	public SecurityGoal parent = null;
 	public RequirementLink parent_link = null;
+	
 
 	public SecurityGoal() {
 		super();
 		this.setType(InfoEnum.RequirementElementType.SECURITY_GOAL.name());
-		// TODO Auto-generated constructor stub
 	}
 
 	public SecurityGoal(String name, String type, String layer, LinkedList<RequirementLink> inLinks,
 			LinkedList<RequirementLink> outLinks) {
 		super(name, type, layer, inLinks, outLinks);
-		// TODO Auto-generated constructor stub
 	}
 
 	public SecurityGoal(String name, String type, String layer) {
 		super(name, type, layer);
-		// TODO Auto-generated constructor stub
 	}
 
 	public SecurityGoal(String importance, String security_attribute, String asset, String interval, String type,
@@ -158,11 +157,17 @@ public class SecurityGoal extends RequirementElement {
 		expression += "importance(" + this.getImportance() + ").\n";
 		expression += "interval(" + this.getInterval() + ").\n"; 
 		expression += "has_properties(" + getFormalName() + "," + this.getImportance() + ","
-				+ this.getSecurityAttribute() + "," + this.getAsset() + "," + this.getInterval() + ").";
+				+ this.getSecurityAttribute() + "," + this.getAsset() + "," + this.getInterval() + ").\n";
 
 		//also output the ownership of this security goal, which maybe redundant, but helpful in exhaustive security goals analysis.
 		if(this.owner!=null){
 			expression += "has(" + this.owner.getFormalName()+"," +this.getFormalName()+ ").\n";
+		}
+		else if(this.owner_text!=null){
+			expression += "has(" + owner_text+"," +this.getFormalName()+ ").\n";
+		}
+		else {
+			expression += "Warning: the security goal "+ this.getFormalName()+" doesn't have an owner!";
 		}
 		
 		expression = expression.replaceAll(" ", "_");

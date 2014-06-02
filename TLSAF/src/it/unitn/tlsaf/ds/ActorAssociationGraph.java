@@ -1,5 +1,7 @@
 package it.unitn.tlsaf.ds;
 
+import it.unitn.tlsaf.func.CommandPanel;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -82,13 +84,14 @@ public class ActorAssociationGraph {
 		/*
 		 * this part is exclusively for requirement elements 0)notation,element;
 		 * 1)id,51670; 2)shape,Hexagon; 3)name,Calculate price;
-		 * 4)layer,Business; 5)thickness,; 6)double stroke; 7)size:
+		 * 4)Layer, Layer 1 by default; 5)thickness,; 6)double stroke; 7)size:
 		 * 117.945899963379 43.817626953125; 8)no fill; 9)0.0 corner radius 10)
 		 * stroke pattern: 0 11) origin: 87.234039306641 1084.06665039062
+		 * 12) owner: xx 13) Canvas, Actor association
 		 */
 		RequirementElement new_actor = new RequirementElement();
-		if(!factors.get(4).equals("Actor association")){
-			System.out.println("only processing actor association diagram");
+		if(!factors.get(13).equals("Actor association")){
+			CommandPanel.logger.fine("only processing actor association diagram");
 		}
 		//actors
 		if (factors.get(2).equals("Circle")) {
@@ -116,7 +119,7 @@ public class ActorAssociationGraph {
 		 * 2)arrow type,StickArrow; 3)line type, curved; 4)source/tail,51670;
 		 * 5)destination/head,51490; 6)label,NoLabel;(The shape of that label is
 		 * not considered, only the content of that label) 7)dash type,0;
-		 * 8)thickness,1.0; 9)head scale,1.0
+		 * 8)thickness,1.0; 9)head scale,1.0 10) layer, Layer 1
 		 */
 		RequirementLink new_link = new RequirementLink();
 		// first process complex links
@@ -146,19 +149,24 @@ public class ActorAssociationGraph {
 		return new_link;
 	}
 
-	public String generateFormalExpression() throws FileNotFoundException, UnsupportedEncodingException {
+	//TODO: can be further abstracted to a parent class, the same for the following methods.
+	public String generateFormalExpression(){
 		String result = "";
 		for (Element e : this.elements) {
 			if (e.getFormalExpressions() != "")
 				result += e.getFormalExpressions() + "\n";
 		}
 		for (Link l : this.links) {
-			if (l.getFormalExpression() != "")
-				result += l.getFormalExpression() + "\n";
+			if (l.getFormalExpressions() != "")
+				result += l.getFormalExpressions() + "\n";
 		}
-
 		result = result.toLowerCase();
-		
+		return result;
+	}
+	
+	public String generateFormalExpressionToFile() throws FileNotFoundException, UnsupportedEncodingException {
+		String result = generateFormalExpression(); 
+				
 		String output = "";
 		if (this.getType() == InfoEnum.ModelCategory.ACTOR.name()) {
 			output = "dlv/models/actor_association_model.dl";

@@ -101,8 +101,7 @@ public class RequirementLink implements Link {
 	}
 
 	@Override
-	public String getFormalExpression() {
-		// TODO Auto-generated method stub
+	public String getFormalExpressions() {
 		String expression = null;
 		String source = "";
 		String target = "";

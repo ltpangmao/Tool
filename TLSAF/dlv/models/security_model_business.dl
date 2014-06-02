@@ -23,39 +23,3 @@ s_make(auditing,service_integrity).
 s_help(auditing,service_availability).
 s_make(backup,service_availability).
 s_help(backup,service_integrity).
-
-
-
-% application layer security model
-s_make(full_view_with_errors, data_confidentiality).
-s_make(limited_view, data_confidentiality).
-s_make(secure_pipe, data_confidentiality).
-s_make(secure_pipe, data_integrity).
-s_make(encrypted_storage, data_confidentiality).
-s_make(encrypted_storage, data_integrity).
-s_make(secure_access_layer, data_confidentiality).
-s_make(secure_access_layer, data_integrity).
-s_make(data_backup, data_integrity).
-s_make(server_sand_box, application_integrity).
-s_help(server_sand_box, application_availability).
-s_make(input_guard, application_integrity).
-s_help(input_guard, application_availability).
-s_help(firewall, application_integrity).
-s_help(firewall, application_availability).
-s_make(replicated_system, application_availability).
-s_make(load_balancer, application_availability).
-
-
-
-% physical layer security model
-s_help(secure_office, data_confidentiality).
-s_help(secure_office, data_integrity).
-s_make(physical_entry_control, data_confidentiality).
-s_make(physical_entry_control, data_integrity).
-s_help(physical_entry_control, hardware_integrity).
-s_help(physical_entry_control, hardware_availability).
-s_help(monitor, hardware_integrity).
-s_help(monitor, hardware_availability).
-s_make(anti_tamper_protection, hardware_integrity).
-s_help(anti_tamper_protection, hardware_availability).
-s_make(ups, hardware_availability).

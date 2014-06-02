@@ -11,7 +11,40 @@ public class InfoEnum {
 	// private static final String[] REQUIREMENT_ELEMENT_TYPE = { "positive",
 	// "negative",
 	// "unknown" };
-
+	
+	//Object parameters
+	public static final int ALL_MODELS= 0;
+	public static final int SELECTED_MODELS= 1;
+	//Visualization parameters
+	public static final int GRAPHVIZ= 0;
+	public static final int CANVAS= 1;
+	//View parameters
+	public static final int INITIAL_VIEW= 0;
+	public static final int HIGHLIGHT_VIEW= 1;
+	public static final int SIMPLIFIED_VIEW= 2;
+	
+	//Draw elements size parameter
+	public static final int NORMAL_SIZE= 0;
+	public static final int POINT_SIZE= 1;
+	public static final int ACTOR_SIZE= 2;
+		
+	
+	
+	//Draw Link parameters
+	public static final int CROSS_LAYERS= 0;
+	public static final int SINGLE_LAYER= 1;
+	
+	//global variable for configuring the name of canvas of requirements model.
+	public static final String REQ_TARGET_CANVAS="Model";
+//	public static final String ESG_BP_CANVAS="Business SG";
+	
+	public static final Map<String, String> esg_canvas = new HashMap<String, String>();
+	static {
+		esg_canvas.put(InfoEnum.Layer.BUSINESS.name(), "Business SG");
+		esg_canvas.put(InfoEnum.Layer.APPLICATION.name(), "Application SG");
+		esg_canvas.put(InfoEnum.Layer.PHYSICAL.name(), "Pysical SG");
+	}
+	
 	// determine type of scanned shape
 	public static final Map<String, String> req_elem_type_map = new HashMap<String, String>();
 	static {
@@ -92,7 +125,7 @@ public class InfoEnum {
 
 	// Other enumerations
 	public enum Layer {
-		BUSINESS, APPLICATION, PHYSICAL
+		BUSINESS, APPLICATION, PHYSICAL, ALL
 	}
 
 	public enum AssetType {
@@ -123,5 +156,12 @@ public class InfoEnum {
 	// Additional remark
 	public enum RefineType {
 		ATTRIBUTE, ASSET, INTERVAL
+	}
+	
+	/*
+	 * enumerate all commands that can be done by the tool
+	 */
+	public enum Commands {
+		IMP_SELECTION, IMP_FILE, REF_ALL_ONE_STEP, REF_ALL_EXHAUSTIVE
 	}
 }

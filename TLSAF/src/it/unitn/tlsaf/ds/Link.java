@@ -19,5 +19,5 @@ public interface Link {
 
 	public void printInfo();
 	
-	public String getFormalExpression();
+	public String getFormalExpressions();
 }

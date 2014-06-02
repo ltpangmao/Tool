@@ -6,11 +6,12 @@
 non_leaf(R1) :- and_refine(R2, R1).
 non_leaf(R1) :- refine(R2, R1).
 non_leaf(R1) :- operationalize(R2, R1).
-%non_leaf(R1) :- make(R2, R1).
-%non_leaf(R1) :- help(R2, R1).
-%non_leaf(R1) :- break(R2, R1).
-%non_leaf(R1) :- hurt(R2, R1).
-%non_leaf(R1) :- support(R2, R1).
+
+non_leaf(R1) :- make(R2, R1).
+non_leaf(R1) :- help(R2, R1).
+non_leaf(R1) :- break(R2, R1).
+non_leaf(R1) :- hurt(R2, R1).
+non_leaf(R1) :- support(R2, R1).
 
 
 % Auxiliary rules --- descendent 
@@ -32,9 +33,9 @@ is_not_applicable(SG) :- sec_goal(SG), has_properties(SG, _, hardware_availabili
 
 
 %Critical Security Goal Identification rules, we consider only leaf security goals in mannual analysis. We put the leaf constraints here to maximally reuse the inference rules.
-is_critical(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, extreme_high).%, not non_leaf(SG).
-is_critical(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, high).%, not non_leaf(SG).
-non_deterministic(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, medium), not is_critical(SG).%, not non_leaf(SG).
+is_critical(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, extreme_high), not non_leaf(SG).
+is_critical(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, high), not non_leaf(SG).
+non_deterministic(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, medium), not is_critical(SG), not non_leaf(SG).
 
 %these predicates are particularly used to support the automatic refinement analysis
 %is_i_critical(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, extreme_high).
@@ -108,4 +109,4 @@ trust(A1, A3, 5) :- trust(A1, A2, 5), trust(A2, A3, 5).
 %is_applicable(SG2) :- is_applicable(SG1), has_properties(SG1, IMP, SA, AS1, T), has_properties(SG2, IMP, SA, AS2, T), part_of(AS2, AS1).
 
 % Temporarily add this to disable non_deterministic security goals. 
-is_critical(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, medium).%, not non_leaf(SG).
+is_critical(SG) :- sec_goal(SG), is_applicable(SG), risk_level(SG, medium), not non_leaf(SG).

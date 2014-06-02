@@ -1,5 +1,14 @@
 package it.unitn.tlsaf.func;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import it.unitn.tlsaf.ds.InfoEnum;
 import it.unitn.tlsaf.ds.RequirementElement;
 import it.unitn.tlsaf.ds.RequirementLink;
@@ -8,17 +17,37 @@ import it.unitn.tlsaf.ds.SecurityGoal;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import javax.sound.midi.MidiDevice.Info;
 
+/**
+ * This class is designed to directly interact with OmniGraffle with AppleScript
+ * The scripts are hardened into java code in order to customize their parameters
+ * @author litong30
+ * 
+ */
 public class AppleScript {
 
-	public static String drawRequirementLink(RequirementLink rl) throws ScriptException {
-		// InfoEnum.Layer.BUSINESS.name(), "51689", "51699",
-
-		// String layer = InfoEnum.Layer.BUSINESS.name();
-		// String target_id = "51699";
-		// String source_id = "51689";
-
-		String layer = rl.getSource().getLayer();
+	/**
+	 * Draw a single requirement link object onto the canvas.
+	 * @param rl
+	 * @param layer_condition
+	 * @return
+	 * @throws ScriptException
+	 */
+	public static String drawRequirementLink(RequirementLink rl, int layer_condition) throws ScriptException {
+		String canvas_layer="";
+		String target_layer="";
+		
+		if(layer_condition == InfoEnum.CROSS_LAYERS){
+			canvas_layer = "none";
+			target_layer = rl.getSource().getLayer();
+		} else if (layer_condition == InfoEnum.SINGLE_LAYER){
+			canvas_layer = rl.getSource().getLayer();
+			target_layer = rl.getSource().getLayer();
+		} else{
+			CommandPanel.logger.severe("Cross-layer option error!");;
+		}
+		
 		String target_id = rl.getTarget().getId();
 		String source_id = rl.getSource().getId();
 
@@ -34,50 +63,76 @@ public class AppleScript {
 				& rl.getSource().getType().equals(InfoEnum.RequirementElementType.MIDDLE_POINT.name())) {
 			head_type = "SharpArrow";
 			stroke_pattern = "0";
-			label = "";
+			label = "none";
 		} else if (rl.getType().equals(InfoEnum.RequirementLinkType.AND_REFINE.name())) {
 			head_type = "";
 			stroke_pattern = "0";
-			label = "";
+			label = "none";
 		} else if (rl.getType().equals(InfoEnum.RequirementLinkType.REFINE.name())) {
 			head_type = "SharpArrow";
 			stroke_pattern = "0";
-			label = "";
+			label = "none";
 		} else if (rl.getTarget().equals(InfoEnum.RequirementLinkType.OPERATIONALIZE.name())) {
 			head_type = "StickArrow";
 			stroke_pattern = "0";
-			label = "";
+			label = "none";
 		} else if (rl.getType().equals(InfoEnum.RequirementLinkType.SUPPORT.name())) {
 			head_type = "SharpArrow";
 			stroke_pattern = "1";
-			label = "";
+			label = "none";
 		} else if (rl.getType().equals(InfoEnum.RequirementLinkType.PREFERRED_TO.name())) {
 			head_type = "DoubleArrow";
 			stroke_pattern = "0";
-			label = "";
+			label = "none";
 		} else if (rl.getType().equals(InfoEnum.RequirementLinkType.MAKE.name())) {
 			head_type = "StickArrow";
 			stroke_pattern = "0";
-			label = "make new label at end of labels of result_line with properties {text:{size:14, alignment:center, text:\"make\"}, draws shadow:false, draws stroke:false}\n";
+			label = "Make";
 		} else if (rl.getType().equals(InfoEnum.RequirementLinkType.HELP.name())) {
 			head_type = "StickArrow";
 			stroke_pattern = "0";
-			label = "make new label at end of labels of result_line with properties {text:{size:14, alignment:center, text:\"help\"}, draws shadow:false, draws stroke:false}\n";
+			label = "Help";
 		} else if (rl.getType().equals(InfoEnum.RequirementLinkType.HURT.name())) {
 			head_type = "StickArrow";
 			stroke_pattern = "0";
-			label = "make new label at end of labels of result_line with properties {text:{size:14, alignment:center, text:\"hurt\"}, draws shadow:false, draws stroke:false}\n";
+			label = "Hurt";
 		} else if (rl.getType().equals(InfoEnum.RequirementLinkType.BREAK.name())) {
 			head_type = "StickArrow";
 			stroke_pattern = "0";
-			label = "make new label at end of labels of result_line with properties {text:{size:14, alignment:center, text:\"break\"}, draws shadow:false, draws stroke:false}\n";
+			label = "Break";
 		} else {
-
 		}
 
-		return drawRequirementLink(layer, target_id, source_id, head_type, stroke_pattern, label);
-
+		// here the layer_value = canvas_layer
+		return drawArbitraryRequirementLink(InfoEnum.REQ_TARGET_CANVAS, canvas_layer, target_id, source_id, head_type,
+				stroke_pattern, label, target_layer);
 	}
+	
+	
+	public static String drawESGRefinementLink(RequirementLink rl) throws ScriptException {
+		
+		String initial_layer = "none";
+		String layer_value = "All";
+		String target_id = rl.getTarget().getId();
+		String source_id = rl.getSource().getId();
+
+		String head_type = "StickArrow";
+		String stroke_pattern = "0";
+		String label = null;
+		
+		if(rl.refine_type.equals(InfoEnum.RefineType.ATTRIBUTE.name())){
+			label ="S";
+		}else if (rl.refine_type.equals(InfoEnum.RefineType.ASSET.name())){
+			label ="A";
+		}else if (rl.refine_type.equals(InfoEnum.RefineType.INTERVAL.name())){
+			label = "I";
+		}else {
+			CommandPanel.logger.warning("Refinement type error!");
+		}
+		
+		return drawArbitraryRequirementLink(InfoEnum.esg_canvas.get(rl.getSource().getLayer()), initial_layer, target_id, source_id, head_type, stroke_pattern, label, layer_value);
+	}
+
 
 	/**
 	 * @param layer
@@ -89,71 +144,102 @@ public class AppleScript {
 	 * @return id
 	 * @throws ScriptException
 	 */
-	public static String drawRequirementLink(String layer, String target_id, String source_id, String head_type,
-			String stroke_pattern, String label) throws ScriptException {
-		// harden code here instead of passing through files
-		String script = "global target_canvas_name\n";
-		script += "set target_canvas_name to \"" + layer + "\"\n" + "global target_canvas\n"
-				+ "set target_canvas to missing value\n" + "global target_id\n" + "set target_id to " + target_id
-				+ "\n" + "global source_id\n" + "set source_id to " + source_id + "\n" + "global target_elem\n"
-				+ "set target_elem to missing value\n" + "global source_elem\n" + "set source_elem to missing value\n"
-				+ "tell application id \"OGfl\"\n" + "set canvas_list to canvases of front window\n"
-				+ "repeat with canvas_temp in canvas_list\n"
-				+ "if (name of canvas_temp is equal to target_canvas_name) then\n"
-				+ "set target_canvas to canvas_temp\n" + "set shape_list to graphics of canvas_temp\n"
-				+ "repeat with shape_temp in shape_list\n" + "if (id of shape_temp is equal to source_id) then\n"
-				+ "set source_elem to shape_temp\n" + "end if\n"
-				+ "	if (id of shape_temp is equal to target_id) then\n" + "set target_elem to shape_temp\n"
-				+ "end if\n" + "end repeat\n" + "end if\n" + "end repeat\n" + "tell target_canvas\n"
-				+ "set result_line to (connect source_elem to target_elem with properties {head type:\"" + head_type
-				+ "\", stroke pattern:" + stroke_pattern + "})\n" + label + "id of result_line\n" + "end tell\n"
-				+ "end tell\n";
+	
+	public static String drawArbitraryRequirementLink(String canvas, String layer, String target_id, String source_id,
+			String head_type, String stroke_pattern, String label, String link_layer) throws ScriptException {
+		// TODO: for simplicity 
+		layer = "none";
+		
+		//set parameters & call the exact method
+		String script = "";
+		script += "set target_canvas_name to \""+canvas+"\"\n"
+				+ "set target_layer_name to \""+layer+"\"\n"
+				+ "set target_id to "+ target_id +"\n"
+				+ "set source_id to "+ source_id+"\n"
+				+ "set head_type to \""+head_type+"\"\n"
+				+ "set stroke_pattern to " + stroke_pattern +"\n"
+				+ "set label_text to \""+ label +"\"\n"
+				+ "set link_layer to \""+ link_layer +"\"\n"
+				+ "draw_link(target_canvas_name, target_layer_name, target_id, source_id, head_type, stroke_pattern, label_text, link_layer)\n";
+		
+		//import the method codes
+		String method_file = "applescript/drawing_methods.applescript";
+		try {
+			script = loadMethods(script, method_file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		System.out.println(script);
 
-		// System.out.println(script);
-		// return null;
+		//execute methods
+		//TODO: need to decide throw exception or handle it here?
 		ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
 		String id = String.valueOf((long) scriptEngine.eval(script));
-		System.out.println(id);
+		//System.out.println(id);
 		return id;
 	}
 
-	public static String drawRequirementElement(RequirementElement target, String reference_id, String direction)
+	
+	public static String drawRequirementElement(RequirementElement target, RequirementElement reference, String direction)
 			throws ScriptException {
 		// customized parameters
 		String layer = target.getLayer();
-		String offset = "";
+
+		double x = 0, y = 0;
+		String position = "";
+		
 		if (direction.equals("up")) {
-			offset = "{0, -200}";
+			x = reference.origin_x;
+			y = reference.origin_y - 200;
 		} else if (direction.equals("down")) {
-			offset = "{0, +200}";
+			x = reference.origin_x;
+			y = reference.origin_y + 200;
 		} else if (direction.equals("left")) {
-			offset = "{-200, 0}";
+			x = reference.origin_x - 200;
+			y = reference.origin_y;
 		} else if (direction.equals("right")) {
-			offset = "{+200, 0}";
+			x = reference.origin_x + 200;
+			y = reference.origin_y;
 		} else {
-			offset = "{+100,+100}";
 		}
+		position = "{"+ x +","+ y +"}";
+		// assign the position information to the target element
+		target.origin_x=x;
+		target.origin_y=y;
+		
 		String shape = InfoEnum.reverse_req_elem_type_map.get(target.getType());
-		String size = "{150,90}";
 		String corner_radius = "0";
 		String name = target.getName();
-		if (target.getType().equals(InfoEnum.RequirementElementType.ACTOR.name())) {
-			size = "{100,100}";
-		} else if (target.getType().equals(InfoEnum.RequirementElementType.MIDDLE_POINT.name())) {
-			size = "{15,15.1}";
-		} else if (target.getType().equals(InfoEnum.RequirementElementType.DOMAIN_ASSUMPTION.name())) {
+		
+		if (target.getType().equals(InfoEnum.RequirementElementType.DOMAIN_ASSUMPTION.name())) {
 			corner_radius = "5";
 		} else if (target.getType().equals(InfoEnum.RequirementElementType.SECURITY_GOAL.name())) {
 			name = "(S)\n" + name;
 		} else if (target.getType().equals(InfoEnum.RequirementElementType.SECURITY_MECHANISM.name())) {
 			name = "(S)\n" + name;
 		}
+		
+		int size_type = 0;
+		if(target.getType().equals(InfoEnum.RequirementElementType.ACTOR.name())){
+			size_type = InfoEnum.ACTOR_SIZE;
+		} else if (target.getType().equals(InfoEnum.RequirementElementType.MIDDLE_POINT.name())){
+			size_type = InfoEnum.POINT_SIZE;
+		}
 
-		return drawRequirementElement(reference_id, layer, offset, shape, size, corner_radius, name);
+//		return drawReferredRequirementElement(reference_id, InfoEnum.REQ_TARGET_CANVAS, layer, offset, shape, size, corner_radius, name);
+		return drawArbitraryRequirementElement(InfoEnum.REQ_TARGET_CANVAS, layer, shape, size_type, position, corner_radius, name);
+				
 	}
 
+
+	
+
+
 	/**
+	 * Draw an requirement element according to another referred element
 	 * @param reference_id
+	 * @param canvas
 	 * @param layer
 	 * @param offset
 	 * @param shape
@@ -163,101 +249,235 @@ public class AppleScript {
 	 * @return
 	 * @throws ScriptException
 	 */
-	public static String drawRequirementElement(String reference_id, String layer, String offset, String shape,
+	@Deprecated
+	private static String drawReferredRequirementElement(String reference_id, String canvas, String layer, String offset, String shape,
 			String size, String corner_radius, String name) throws ScriptException {
-		// harden code here instead of passing through files
-		String script = "global target_canvas_name\n";
-		script += "set target_canvas_name to \"" + layer + "\"\n" + "global target_canvas\n"
-				+ "set target_canvas to missing value\n" + "global reference_element_id\n"
-				+ "set reference_element_id to " + reference_id + "\n" + "global reference_element\n"
-				+ "set reference_element to missing value\n" + "global target_offset\n" + "set target_offset to "
-				+ offset + "\n" + "global target_size\n" + "set target_size to " + size + "\n" + "global target_name\n"
-				+ "set target_name to \"" + shape + "\"\n" + "global target_text\n" + "set target_text to \"" + name
-				+ "\"\n";
-		script += "tell application id \"OGfl\"\n"
-				+ "set canvas_list to canvases of front window\n"
-				+ "repeat with canvas_temp in canvas_list\n"
-				+ "if (name of canvas_temp is equal to target_canvas_name) then\n"
-				+ "set target_canvas to canvas_temp\n"
-				+ "set shape_list to graphics of canvas_temp\n"
-				+ "repeat with shape_temp in shape_list\n"
-				+ "if (id of shape_temp is equal to reference_element_id) then\n"
-				+ "set reference_element to shape_temp\n"
-				+ "end if\n"
-				+ "end repeat\n"
-				+ "end if\n"
-				+ "end repeat\n"
-				+ "set reference_origin to origin of reference_element\n"
-				+ "set target_origin to {(item 1 of target_offset) + (item 1 of reference_origin), (item 2 of target_offset) + (item 2 of reference_origin)}\n"
-				+ "tell target_canvas\n"
-				+ "set new_node to make new shape at end of graphics with properties {name:target_name, origin:target_origin, size:target_size, text:{size:14, alignment:center, text:target_text}, draws shadow:false, draws stroke:true, corner radius:"
-				+ corner_radius + "}\n" + "id of new_node\n" + "end tell\n" + "end tell\n";
-		// System.out.println(script);
+		//set parameters & call the exact method
+		String script = "";
+		script += "set reference_element_id to "+reference_id+"\n"
+				+ "set target_canvas_name to \""+canvas+"\"\n"
+				+ "set target_layer_name to \""+layer+"\"\n"
+				+ "set target_size to "+ size +"\n"
+				+ "set target_name to \""+shape+"\"\n"
+				+ "set target_text to \""+name+"\"\n"
+				+ "set corner_ridius to " + corner_radius + "\n"
+				+ "set target_offset to " + offset +"\n"
+				+ "draw_referred_element(reference_element_id, target_canvas_name, target_layer_name, target_size, target_name, target_text, corner_ridius, target_offset)\n";
+				
+		//import the method codes
+		String method_file="applescript/drawing_methods.applescript";
+		try {
+			script = loadMethods(script, method_file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//System.out.println(script);
+
+		//execute methods
+		//TODO: need to decide throw exception or handle it here?
 		ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
 		String id = String.valueOf((long) scriptEngine.eval(script));
-		System.out.println(id);
-		// String id = extractID((String) scriptEngine.eval(script));
+		//System.out.println(id);
 		return id;
 	}
 
+	
 	/**
+	 * Draw a requirement element to an arbitrary position 
+	 * @param canvas
 	 * @param layer
 	 * @param shape
 	 * @param size
 	 * @param position
 	 * @param corner_radius
 	 * @param name
+	 * @param size 
 	 * @return
 	 * @throws ScriptException
 	 */
-	public static String drawRequirementElement(String layer, String shape, String size, String position,
+	public static String drawArbitraryRequirementElement(String canvas, String layer, String shape, int size_type, String position,
 			String corner_radius, String name) throws ScriptException {
-		// harden code here instead of passing through files
-		String script = "global target_canvas_name\n";
-		script += "set target_canvas_name to \"" + layer + "\"\n" + "global target_canvas\n"
-				+ "set target_canvas to missing value\n" + "global target_size\n" + "set target_size to " + size + "\n"
-				+ "global target_name\n" + "set target_name to \"" + shape + "\"\n" + "global target_text\n"
-				+ "set target_text to \"" + name + "\"\n";
-		script += "tell application id \"OGfl\"\n"
-				+ "set canvas_list to canvases of front window\n"
-				+ "repeat with canvas_temp in canvas_list\n"
-				+ "if (name of canvas_temp is equal to target_canvas_name) then\n"
-				+ "set target_canvas to canvas_temp\n"
-				+ "end if\n"
-				+ "end repeat\n"
-				+ "set target_origin to "
-				+ position
-				+ "\n"
-				+ "tell target_canvas\n"
-				+ "set new_node to make new shape at end of graphics with properties {name:target_name, origin:target_origin, size:target_size, text:{size:14, alignment:center, text:target_text}, draws shadow:false, draws stroke:true, corner radius:"
-				+ corner_radius + "}\n" + "id of new_node\n" + "end tell\n" + "end tell\n";
-		//		 System.out.println(script);
+		//pre-calculate size according to the length of name;
+		String size="";
+		if (size_type == InfoEnum.NORMAL_SIZE) {
+			size = approximateSize(name);
+		} else if (size_type == InfoEnum.POINT_SIZE) {
+			size = "{15,15.1}";
+		} else if (size_type == InfoEnum.ACTOR_SIZE){
+			size = "{100,100}";
+		} else{
+			CommandPanel.logger.severe("Draw elements size type error!");
+		}
+		
+		
+		//set parameters & call the exact method
+		String script = "";
+		script += "set target_canvas_name to \""+canvas+"\"\n"
+				+ "set target_layer_name to \""+layer+"\"\n"
+				+ "set target_size to "+ size +"\n"
+				+ "set target_name to \"" + shape + "\"\n"
+				+ "set target_text to \"" + name + "\"\n"
+				+ "set target_origin to " + position +"\n"
+				+ "set corner_ridius to " + corner_radius +"\n"
+				+ "draw_isolated_element(target_canvas_name, target_layer_name, target_size, target_name, target_text, target_origin, corner_ridius)\n";
+				
+		//import the method codes
+		String method_file="applescript/drawing_methods.applescript";
+		try {
+			script = loadMethods(script,method_file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//System.out.println(script);
+
+		//execute methods
 		ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
 		String id = String.valueOf((long) scriptEngine.eval(script));
-		System.out.println(id);
-		// String id = extractID((String) scriptEngine.eval(script));
+		//System.out.println(id);
 		return id;
 	}
+	
 
-	public static void changeAttributeOfElement(String layer, String id, String command) throws ScriptException {
-
-		// harden code here instead of passing through files
-		String script = "global target_canvas_name\n";
-		script += "set target_canvas_name to \"" + layer + "\"\n" + "global target_canvas\n"
-				+ "set target_canvas to missing value\n" + "global target_element_id\n" + "set target_element_id to "
-				+ id + "\n" + "global target_element\n" + "set target_element to missing value\n";
-		script += "tell application id \"OGfl\"\n" + "set canvas_list to canvases of front window\n"
-				+ "repeat with canvas_temp in canvas_list\n"
-				+ "if (name of canvas_temp is equal to target_canvas_name) then\n"
-				+ "set target_canvas to canvas_temp\n" + "set shape_list to graphics of canvas_temp\n"
-				+ "repeat with shape_temp in shape_list\n"
-				+ "if (id of shape_temp is equal to target_element_id) then\n" + "set target_element to shape_temp\n"
-				+ "end if\n" + "end repeat\n" + "end if\n" + "end repeat\n" + "tell target_canvas\n" + command + "\n"
-				+ "end tell\n" + "end tell\n";
-		// System.out.println(script);
+	public static void changeAttributeOfElement(String canvas, String layer, String target_id, String thickness, String color, String layer_value) throws ScriptException {
+		//set parameters & call the exact method
+		String script = "";
+		script += "set target_canvas_name to \""+canvas+"\"\n"
+				+ "set target_layer_name to \""+layer+"\"\n"
+				+ "set target_id to " + target_id +"\n"
+				+ "set thick_value to " + thickness + "\n"
+				+ "set color_value to \"" + color + "\"\n"
+				+ "set layer_value to \"" + layer_value + "\"\n"
+				+ "change_element_attribute(target_canvas_name, target_layer_name, target_id, thick_value, color_value, layer_value)\n";
+		//import the method codes
+		String method_file = "applescript/drawing_methods.applescript";
+		try {
+			script = loadMethods(script, method_file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//execute methods
 		ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
 		scriptEngine.eval(script);
+	}
+	
+	public static void changeAttributeOfLink(String canvas, String layer, String target_id, String thickness, String color, String layer_value) throws ScriptException {
+		//set parameters & call the exact method
+		String script = "";
+		script += "set target_canvas_name to \""+canvas+"\"\n"
+				+ "set target_layer_name to \""+layer+"\"\n"
+				+ "set link_id to " + target_id +"\n"
+				+ "set thick_value to " + thickness + "\n"
+				+ "set color_value to \"" + color + "\"\n"
+				+ "set layer_value to \"" + layer_value + "\"\n"
+				
+				+ "change_link_attribute(target_canvas_name, target_layer_name, link_id, thick_value, color_value, layer_value)\n";
+		//import the method codes
+		String method_file = "applescript/drawing_methods.applescript";
+		try {
+			script = loadMethods(script, method_file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//execute methods
+		ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
+		scriptEngine.eval(script);
+	}
+	
+	
+	public static void addUserData(String canvas, String layer, String target_id, String owner) throws ScriptException {
+		//set parameters & call the exact method
+		String script = "";
+		script += "set target_canvas_name to \""+canvas+"\"\n"
+				+ "set target_layer_name to \""+layer+"\"\n"
+				+ "set owner to \"" + owner + "\"\n"
+				+ "set target_id to " + target_id +"\n"
+				+ "add_user_data(target_canvas_name, target_layer_name, target_id, owner)\n";
+						
+		//import the method codes
+		String method_file = "applescript/drawing_methods.applescript";
+		try {
+			script = loadMethods(script, method_file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//System.out.println(script);
 
+		//execute methods
+		ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
+		//				String result = 
+		scriptEngine.eval(script);
+		//System.out.println(result);
+	}
+	
+	
+	public static ArrayList<Long> getSelectedGraph() throws ScriptException {
+		//set parameters & call the exact method
+		String script = "get_selected_graph()\n";
+						
+		//import the method codes
+		String method_file = "applescript/drawing_methods.applescript";
+		try {
+			script = loadMethods(script, method_file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//System.out.println(script);
+
+		//execute methods
+		ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
+		ArrayList<Long> result = (ArrayList<Long>) scriptEngine.eval(script);
+		return result;
+		//System.out.println(result);
+	}
+	
+	/**
+	 * @param script
+	 * @return
+	 * @throws IOException
+	 */
+	private static String loadMethods(String script, String file) throws IOException {
+		String result = readFile(file, Charset.defaultCharset());
+		List<String> elements = Arrays.asList(result.split("\n"));
+		boolean methods = false;
+		for (String s : elements) {
+			//find the start point
+			if (!methods && s.indexOf("methods") >= 0) {
+				methods = true;
+			}
+			// then import text from the start point
+			if (methods) {
+				script += s + "\n";
+			}
+		}
+		return script;
 	}
 
+	private static String readFile(String path, Charset encoding) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return encoding.decode(ByteBuffer.wrap(encoded)).toString();
+	}
+	
+	
+	private static String approximateSize(String target) {
+		// TODO Auto-generated method stub
+		int text_length = target.length();
+		int graph_width = 0;
+		int graph_height = 0;
+		if(text_length<=60){
+			graph_width = 180;
+			graph_height = 110;	
+		}
+		else{
+			graph_width = 180+(text_length-60);
+			graph_height = 110+(text_length-60);
+		}
+		
+		return "{"+graph_width+","+graph_height+"}";
+	}
 }

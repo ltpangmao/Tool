@@ -3,11 +3,13 @@ is_treated(SG) :- make(SM, SG).
 is_treated(SG) :- help(SM, SG).
 
 
-
+% temporary facts --- a% auxilary rules --- treatment check rules
+is_treated(SG) :- make(SM, SG).
+is_treated(SG) :- help(SM, SG).
 
 
 % temporary facts --- application layer facts
-has(smart_meter_application, support_energy_supplier_communicates_with_smart_meter).
+%has(smart_meter_application, support_energy_supplier_communicates_with_smart_meter).
 support(support_energy_supplier_communicates_with_smart_meter, energy_supplier_communicates_with_smart_meter).
 
 %support(support_measure_current_load_info,measure_current_load_info).
@@ -18,26 +20,20 @@ support(support_energy_supplier_communicates_with_smart_meter, energy_supplier_c
 
 
 
-
-
-
-
 % business to application rule
+
+% security properties regarding to services
 refined_sec_goal(IMP, application_integrity, APP, G, SG) :- sec_goal(SG), has_properties(SG, IMP, service_integrity, AS, T), is_critical(SG), not is_treated(SG), support(G, T), has(APP, G).
 refined_sec_goal(IMP, application_availability, APP, G, SG) :- sec_goal(SG), has_properties(SG, IMP, service_availability, AS, T), is_critical(SG), not is_treated(SG), support(G, T), has(APP, G).
 
+% security properties regarding to data
+% data confidentiality
 refined_sec_goal(IMP, data_confidentiality, AS, G, SG) :- sec_goal(SG), has_properties(SG, IMP, data_confidentiality, AS, T), is_critical(SG), not is_treated(SG), support(G, T), has(APP, G).
+refined_sec_goal(IMP, application_integrity, APP, G, SG) :- sec_goal(SG), has_properties(SG, IMP, data_confidentiality, AS, T), is_critical(SG), not is_treated(SG), support(G, T), has(APP, G).
+% data integrity
 refined_sec_goal(IMP, data_integrity, AS, G, SG) :- sec_goal(SG), has_properties(SG, IMP, data_integrity, AS, T), is_critical(SG), not is_treated(SG), support(G, T), has(APP, G).
+refined_sec_goal(IMP, application_integrity, APP, G, SG) :- sec_goal(SG), has_properties(SG, IMP, data_integrity, AS, T), is_critical(SG), not is_treated(SG), support(G, T), has(APP, G).
 
 
 
-
-
-
-
-%new_sg(IMP, application_confidentiality, APP, G, SG) :- sec_goal(SG), has_properties(SG, IMP, data_confidentiality, AS, T), is_critical(SG), not non_leaf(SG), support(G, T), has(APP, G).
-%new_sg(IMP, application_integrity, APP, G, SG) :- sec_goal(SG), has_properties(SG, IMP, data_integrity, AS, T), is_critical(SG), not non_leaf(SG), support(G, T), has(APP, G).
-%new_sg(IMP, application_confidentiality, APP, G, SG) :- sec_goal(SG), has_properties(SG, IMP, data_integrity, AS, T), is_critical(SG), not non_leaf(SG), support(G, T), has(APP, G).
-
-%new_sg(IMP, application_integrity, APP, G) :- sec_goal(SG), has_properties(SG, IMP, data_integrity, AS, T), is_critical(SG), not make(SM1, SG), not help(SM2, SG), support(G, T), has(APP, G).
 
