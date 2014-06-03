@@ -632,18 +632,16 @@ public class CommandPanel extends ApplicationWindow {
 			//first initalize the global logger
 			CommandPanel.setup();
 			//then run the graphic interface
-			final CommandPanel window = new CommandPanel();
+			CommandPanel window = new CommandPanel();
 			window.setBlockOnOpen(true);
 			window.open();
-			Display.getCurrent().dispose();
-//			Display.getDefault().asyncExec(new Runnable() {
-//			    public void run() {
-//			    	window.open();
-//			    	Display.getCurrent().dispose();
-//			    }
-//			});
-
-			
+			Display.getDefault().asyncExec(new Runnable() {
+			    public void run() {
+			    	Display.getCurrent().dispose();
+			    }
+			});
+//			Display.getCurrent().dispose();
+			//TODO: the size of button will be resized when running the applciation. 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

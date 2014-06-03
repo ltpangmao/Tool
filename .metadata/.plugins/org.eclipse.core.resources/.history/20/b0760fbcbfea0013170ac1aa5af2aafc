@@ -634,15 +634,14 @@ public class CommandPanel extends ApplicationWindow {
 			//then run the graphic interface
 			final CommandPanel window = new CommandPanel();
 			window.setBlockOnOpen(true);
-			window.open();
-			Display.getCurrent().dispose();
-//			Display.getDefault().asyncExec(new Runnable() {
-//			    public void run() {
-//			    	window.open();
-//			    	Display.getCurrent().dispose();
-//			    }
-//			});
-
+//			window.open();
+			Display.getDefault().syncExec(new Runnable() {
+			    public void run() {
+			    	window.open();
+			    	Display.getCurrent().dispose();
+			    }
+			});
+//			Display.getCurrent().dispose();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
