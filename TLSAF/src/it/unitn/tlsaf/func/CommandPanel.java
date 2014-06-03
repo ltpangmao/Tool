@@ -395,7 +395,7 @@ public class CommandPanel extends ApplicationWindow {
 				}
 			}
 		});
-		btnOperationalize.setBounds(428, 361, 108, 56);
+		btnOperationalize.setBounds(428, 361, 94, 42);
 		btnOperationalize.setText("Operationalize");
 		
 		final List alternative_list = new List(container, SWT.V_SCROLL|SWT.H_SCROLL);
@@ -436,7 +436,7 @@ public class CommandPanel extends ApplicationWindow {
 				MessageDialog.openInformation(container.getShell(), "Message", "Identify alternative security solutions!");
 			}
 		});
-		btnCalculateAlternatives.setBounds(428, 423, 94, 52);
+		btnCalculateAlternatives.setBounds(428, 423, 94, 42);
 		btnCalculateAlternatives.setText("Alternative\n Solutions");
 		
 		
@@ -467,7 +467,7 @@ public class CommandPanel extends ApplicationWindow {
 				MessageDialog.openInformation(container.getShell(), "Message", "Transfer security concerns to the application layer!");
 			}
 		});
-		btnTransferSecurityConcerns.setBounds(428, 522, 94, 28);
+		btnTransferSecurityConcerns.setBounds(428, 492, 94, 42);
 		btnTransferSecurityConcerns.setText("Transfer Security\n Concerns");
 		
 		
