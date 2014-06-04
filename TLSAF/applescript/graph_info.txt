@@ -1,98 +1,111 @@
-link;53994;NoHead;curved;53993;53989;NoLabel;0;1,0;1,0;APPLICATION
-link;53992;NoHead;curved;53991;53989;NoLabel;0;1,0;1,0;APPLICATION
-link;53988;SharpArrow;curved;53985;53638;NoLabel;1;1,0;1,0;APPLICATION
-element;53660;Circle;Call external encryption component;APPLICATION;1,0;false;121,15641784668 61,87833404541;solid fill;0,0;0;2136,08837890625 1756,99841308594;null;Model
+link;54085;SharpArrow;curved;53298;54084;NoLabel;1;1,0;1,500000119209;PHYSICAL
+link;53367;SharpArrow;curved;53354;53080;NoLabel;1;1,0;1,500000119209;PHYSICAL
+link;53317;SharpArrow;curved;53298;54082;NoLabel;1;1,0;1,500000119209;PHYSICAL
+link;53264;SharpArrow;curved;53254;53020;NoLabel;1;1,0;1,500000119209;PHYSICAL
+link;53249;SharpArrow;curved;53229;53061;NoLabel;1;1,0;1,500000119209;PHYSICAL
+element;54084;Hexagon;Send data back;APPLICATION;1,0;false;114,684967041016 41,436443328857;no fill;0,0;0;1902,20581054688 1832,09301757812;null;Model
+element;54082;Hexagon;Receive incoming messages;APPLICATION;1,0;false;114,684967041016 41,436443328857;no fill;0,0;0;1833,61303710938 1873,52941894531;null;Model
+element;54075;Hexagon;Dispatch measurement requests;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;1754,8515625 1839,28356933594;null;Model
+link;54083;NoHead;curved;54084;54077;NoLabel;0;1,0;1,0;APPLICATION
+link;54081;NoHead;curved;54082;54077;NoLabel;0;1,0;1,0;APPLICATION
+link;54078;NoHead;curved;54075;54077;NoLabel;0;1,0;1,0;APPLICATION
+element;54077;Circle;empty;APPLICATION;1,0;false;12,938500404358 13,699299812317;solid fill;0,0;0;1884,91528320312 1827,20581054688;null;Model
+link;54076;SharpArrow;curved;54077;54067;NoLabel;0;1,0;1,500000119209;APPLICATION
+element;54067;Hexagon;Process energy query requests;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;1798,10717773438 1758,93029785156;null;Model
+element;54068;Hexagon;Control data flow;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;2129,69287109375 1848,52941894531;null;Model
+link;54095;NoHead;curved;54094;54090;NoLabel;0;1,0;1,0;APPLICATION
+link;54093;NoHead;curved;54092;54090;NoLabel;0;1,0;1,0;APPLICATION
+element;53660;Circle;Call external encryption component;APPLICATION;1,0;false;121,15641784668 61,87833404541;solid fill;0,0;0;2145,58813476562 1752,83032226562;null;Model
 link;53659;NoHead;curved;53660;53657;NoLabel;0;1,0;1,0;APPLICATION
 link;53658;NoHead;curved;53552;53657;NoLabel;0;1,0;1,0;APPLICATION
-element;53657;Circle;empty;APPLICATION;1,0;false;12,938500404358 13,699299812317;solid fill;0,0;0;2264,4736328125 1747,85925292969;null;Model
+element;53657;Circle;empty;APPLICATION;1,0;false;12,938500404358 13,699299812317;solid fill;0,0;0;2276,47045898438 1746,97900390625;null;Model
 link;53656;SharpArrow;curved;53657;53553;NoLabel;0;1,0;1,500000119209;APPLICATION
-link;53555;StickArrow;curved;52974;53660;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;53554;Hexagon;Encryption component;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;2187,65234375 1834,21057128906;null;Model
-element;53553;Circle;Hardware based encryption;APPLICATION;1,0;false;93,599998474121 53,636363983154;solid fill;0,0;0;2260,63403320312 1678,15161132812;null;Model
-element;53552;Circle;Encrypt data;APPLICATION;1,0;false;93,599998474121 53,636363983154;solid fill;0,0;0;2292,10522460938 1763,73486328125;null;Model
+link;53555;StickArrow;curved;54068;53660;NoLabel;0;1,0;1,500000119209;APPLICATION
+element;53554;Hexagon;Encrypt data;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;2232,35302734375 1820,2451171875;null;Model
+element;53553;Circle;Hardware based encryption;APPLICATION;1,0;false;93,599998474121 53,636363983154;solid fill;0,0;0;2259,1171875 1671,81872558594;null;Model
+element;53552;Circle;Process data;APPLICATION;1,0;false;93,599998474121 53,636363983154;solid fill;0,0;0;2307,56811523438 1752,83032226562;null;Model
 link;53548;SharpArrow;curved;53553;53539;NoLabel;0;1,0;1,500000119209;APPLICATION
 link;53547;StickArrow;curved;53554;53552;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;53539;Circle;Support cryptographic control;APPLICATION;1,0;false;131,241744995117 65,879425048828;solid fill;0,0;0;2139,91259765625 1618,16198730469;null;Model
+element;53539;Circle;Support cryptographic control;APPLICATION;1,0;false;108,213554382324 63,878902435303;solid fill;0,0;0;2133,69946289062 1615,48852539062;null;Model
 link;53542;SharpArrow;curved;53539;53638;NoLabel;1;1,0;1,0;APPLICATION
 link;53537;NoHead;curved;53037;53039;NoLabel;0;1,0;1,0;APPLICATION
-element;53534;Circle;Smart Appliance Application;APPLICATION;1,0;false;100,799995422363 100,799995422363;solid fill;0,0;0;2938,33740234375 2019,97875976562;null;Model
-element;53533;Circle;Home Energy Management System;APPLICATION;1,0;false;100,799995422363 100,799995422363;solid fill;0,0;0;2276,26391601562 1982,58337402344;null;Model
+element;53534;Circle;Smart Appliance Application;APPLICATION;1,0;false;100,799995422363 100,799995422363;solid fill;0,0;0;3157,4580078125 1615,96276855469;null;Model
+element;53533;Circle;Home Energy Management System;APPLICATION;1,0;false;100,799995422363 100,799995422363;solid fill;0,0;0;2495,384765625 1578,5673828125;null;Model
 element;53649;Circle;Smart Meter Application;APPLICATION;1,0;false;100,799995422363 100,799995422363;solid fill;0,0;0;1666,10375976562 1566,51696777344;null;Model
-element;53516;AndGate;D;APPLICATION;1,0;false;25,199998855591 13,699299812317;solid fill;0,0;0;2893,65112304688 2014,77709960938;null;Model
+element;53516;AndGate;D;APPLICATION;1,0;false;25,199998855591 13,699299812317;solid fill;0,0;0;3112,6982421875 1610,79113769531;null;Model
 link;53515;NoHead;curved;53534;53512;D;0;1,0;1,0;APPLICATION
-element;53514;AndGate;D;APPLICATION;1,0;false;25,199998855591 13,699299812317;solid fill;0,0;0;2567,578125 1983,13916015625;null;Model
+element;53514;AndGate;D;APPLICATION;1,0;false;25,199998855591 13,699299812317;solid fill;0,0;0;2786,69897460938 1579,12316894531;null;Model
 link;53513;NoHead;curved;53512;53533;D;0;1,0;1,0;APPLICATION
-element;53512;Circle;Remotely control smart appliances;APPLICATION;1,0;false;113,775894165039 38,974044799805;no fill;0,0;0;2766,38623046875 1953,24682617188;null;Model
+element;53512;Circle;Remotely control smart appliances;APPLICATION;1,0;false;113,775894165039 38,974044799805;no fill;0,0;0;2985,5068359375 1549,23083496094;null;Model
 link;53062;StickArrow;curved;53061;53060;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;53061;Hexagon;SAA communication component;APPLICATION;1,0;false;113,757537841797 42,762573242188;no fill;0,0;0;3081,03588867188 2211,78344726562;null;Model
-element;53060;Circle;Communicate with HEMS;APPLICATION;1,0;false;134,917007446289 47,414390563965;no fill;0,0;0;3109,39404296875 2126,58642578125;null;Model
+element;53061;Hexagon;SAA communication component;APPLICATION;1,0;false;113,757537841797 42,762573242188;no fill;0,0;0;3300,15673828125 1807,76745605469;null;Model
+element;53060;Circle;Communicate with HEMS;APPLICATION;1,0;false;134,917007446289 47,414390563965;no fill;0,0;0;3328,51489257812 1722,5703125;null;Model
 link;53059;StickArrow;curved;53058;53057;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;53058;Hexagon;Monitoring component;APPLICATION;1,0;false;113,757537841797 42,762573242188;no fill;0,0;0;2974,47705078125 2218,14990234375;null;Model
-element;53057;Circle;Include appropriate monitoring modules;APPLICATION;1,0;false;134,917007446289 47,414390563965;no fill;0,0;0;2974,47705078125 2150,43725585938;null;Model
+element;53058;Hexagon;Monitoring component;APPLICATION;1,0;false;113,757537841797 42,762573242188;no fill;0,0;0;3193,59790039062 1814,1337890625;null;Model
+element;53057;Circle;Include appropriate monitoring modules;APPLICATION;1,0;false;134,917007446289 47,414390563965;no fill;0,0;0;3193,59790039062 1746,42138671875;null;Model
 link;53056;NoHead;curved;53060;53054;NoLabel;0;1,0;1,0;APPLICATION
 link;53055;NoHead;curved;53057;53054;NoLabel;0;1,0;1,0;APPLICATION
-element;53054;Circle;empty;APPLICATION;1,0;false;12,938500404358 13,699299812317;solid fill;0,0;0;3081,03588867188 2125,541015625;null;Model
+element;53054;Circle;empty;APPLICATION;1,0;false;12,938500404358 13,699299812317;solid fill;0,0;0;3300,15673828125 1721,52514648438;null;Model
 link;53053;SharpArrow;curved;53054;53052;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;53052;Circle;Can be remotely monitored and controlled;APPLICATION;1,0;false;121,15641784668 47,414390563965;no fill;0,0;0;3055,28515625 2051,1630859375;null;Model
-element;53048;Circle;empty;APPLICATION;1,0;false;314,323211669922 270,901672363281;solid fill;0,0;1;2944,1943359375 2030,79309082031;null;Model
+element;53052;Circle;Can be remotely monitored and controlled;APPLICATION;1,0;false;121,15641784668 47,414390563965;no fill;0,0;0;3274,40600585938 1647,14721679688;null;Model
+element;53048;Circle;empty;APPLICATION;1,0;false;314,323211669922 270,901672363281;solid fill;0,0;1;3163,31494140625 1626,77709960938;null;Model
 link;53047;StickArrow;curved;53046;53040;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;53046;Hexagon;Remote control component;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;2452,42236328125 2260,25830078125;null;Model
+element;53046;Hexagon;Remote control component;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;2671,54321289062 1856,24243164062;null;Model
 link;53043;StickArrow;curved;53020;53037;NoLabel;0;1,0;1,500000119209;APPLICATION
 link;53041;NoHead;curved;53040;53039;NoLabel;0;1,0;1,0;APPLICATION
-element;53040;Circle;Remotely control smart appliances;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;2558,39208984375 2206,1904296875;null;Model
-element;53039;Circle;empty;APPLICATION;1,0;false;12,938500404358 13,699299812317;solid fill;0,0;0;2580,388671875 2146,77026367188;null;Model
+element;53040;Circle;Remotely control smart appliances;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;2777,51293945312 1802,17443847656;null;Model
+element;53039;Circle;empty;APPLICATION;1,0;false;12,938500404358 13,699299812317;solid fill;0,0;0;2799,50927734375 1742,75439453125;null;Model
 link;53038;SharpArrow;curved;53039;53009;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;53037;Circle;Communicate with SAA;APPLICATION;1,0;false;102,752380371094 41,436443328857;no fill;0,0;0;2470,82641601562 2181,2734375;null;Model
+element;53037;Circle;Communicate with SAA;APPLICATION;1,0;false;102,752380371094 41,436443328857;no fill;0,0;0;2689,94702148438 1777,25756835938;null;Model
 link;53034;StickArrow;curved;53025;53014;NoLabel;0;1,0;1,500000119209;APPLICATION
 link;53033;NoHead;curved;53014;53016;NoLabel;0;1,0;1,0;APPLICATION
 link;53032;SharpArrow;curved;53031;52441;NoLabel;1;1,0;1,500000119209;APPLICATION
-element;53031;Circle;Support execute adjustment policy;APPLICATION;1,0;false;121,15641784668 61,87833404541;no fill;0,0;0;2691,81689453125 2058,900390625;null;Model
-element;53025;Hexagon;Policy execution component;APPLICATION;1,0;false;113,757537841797 42,762573242188;no fill;0,0;0;2695,51635742188 2235,76000976562;null;Model
+element;53031;Circle;Support execute adjustment policy;APPLICATION;1,0;false;121,15641784668 61,87833404541;no fill;0,0;0;2910,93774414062 1654,88452148438;null;Model
+element;53025;Hexagon;Policy execution component;APPLICATION;1,0;false;113,757537841797 42,762573242188;no fill;0,0;0;2914,63696289062 1831,74401855469;null;Model
 link;53019;NoHead;curved;53018;53016;NoLabel;0;1,0;1,0;APPLICATION
-element;53018;Circle;Create and edit policy;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;2627,60717773438 2159,8310546875;null;Model
-element;53016;Circle;empty;APPLICATION;1,0;false;12,938500404358 13,699299812317;solid fill;0,0;0;2708,75170898438 2136,59130859375;null;Model
+element;53018;Circle;Create and edit policy;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;2846,72778320312 1755,81518554688;null;Model
+element;53016;Circle;empty;APPLICATION;1,0;false;12,938500404358 13,699299812317;solid fill;0,0;0;2927,87231445312 1732,57531738281;null;Model
 link;53015;SharpArrow;curved;53016;53031;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;53014;Circle;Execute policy;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;2730,35961914062 2146,77026367188;null;Model
+element;53014;Circle;Execute policy;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;2949,48022460938 1742,75439453125;null;Model
 link;53012;StickArrow;curved;53010;53018;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;53010;Hexagon;Policy development component;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;2602,45141601562 2256,14404296875;null;Model
+element;53010;Hexagon;Policy development component;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;2821,57202148438 1852,12817382812;null;Model
 link;53029;SharpArrow;curved;53007;52423;NoLabel;1;1,0;1,500000119209;APPLICATION
 link;53028;SharpArrow;curved;53009;52435;NoLabel;1;1,0;1,500000119209;APPLICATION
 link;53027;SharpArrow;curved;53008;52424;NoLabel;1;1,0;1,500000119209;APPLICATION
 link;53024;StickArrow;curved;53020;53022;NoLabel;0;1,0;1,500000119209;APPLICATION
 link;53023;SharpArrow;curved;53022;53008;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;53022;Circle;Communicate with ESSA;APPLICATION;1,0;false;93,599998474121 47,989032745361;no fill;0,0;0;2443,51391601562 2125,541015625;null;Model
+element;53022;Circle;Communicate with ESSA;APPLICATION;1,0;false;93,599998474121 47,989032745361;no fill;0,0;0;2662,634765625 1721,52514648438;null;Model
 link;53021;StickArrow;curved;53020;53011;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;53020;Hexagon;HEMS communication component;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;2344,20874023438 2241,19506835938;null;Model
+element;53020;Hexagon;HEMS communication component;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;2563,32934570312 1837,17919921875;null;Model
 link;53013;SharpArrow;curved;53011;53007;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;53011;Circle;Communicate with HEMS;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;2324,1943359375 2175,68676757812;null;Model
-element;53009;Circle;Support control smart appliances;APPLICATION;1,0;false;121,15641784668 61,87833404541;no fill;0,0;0;2573,57861328125 2046,24560546875;null;Model
-element;53008;Circle;Support customer communicates with smart meter;APPLICATION;1,0;false;121,15641784668 61,87833404541;no fill;0,0;0;2452,42236328125 2041,19506835938;null;Model
-element;53007;Circle;Support customer communicates with energy supplier;APPLICATION;1,0;false;131,241744995117 61,87833404541;no fill;0,0;0;2324,73486328125 2078,8564453125;null;Model
-element;53536;Circle;empty;APPLICATION;1,0;false;591,80615234375 316,378753662109;solid fill;0,0;1;2284,84619140625 2009,96228027344;null;Model
+element;53011;Circle;Communicate with HEMS;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;2543,31518554688 1771,67077636719;null;Model
+element;53009;Circle;Support control smart appliances;APPLICATION;1,0;false;121,15641784668 61,87833404541;no fill;0,0;0;2792,69946289062 1642,22961425781;null;Model
+element;53008;Circle;Support customer communicates with smart meter;APPLICATION;1,0;false;121,15641784668 61,87833404541;no fill;0,0;0;2671,54296875 1637,17919921875;null;Model
+element;53007;Circle;Support customer communicates with energy supplier;APPLICATION;1,0;false;131,241744995117 61,87833404541;no fill;0,0;0;2543,85546875 1674,84057617188;null;Model
+element;53536;Circle;empty;APPLICATION;1,0;false;591,80615234375 316,378753662109;solid fill;0,0;1;2503,96704101562 1605,9462890625;null;Model
 link;53002;SharpArrow;curved;52971;52450;NoLabel;1;1,0;1,500000119209;APPLICATION
 link;53001;SharpArrow;curved;52973;52459;NoLabel;1;1,0;1,500000119209;APPLICATION
 link;53000;SharpArrow;curved;52972;52449;NoLabel;1;1,0;1,500000119209;APPLICATION
 link;52999;StickArrow;curved;52998;52979;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;52998;Hexagon;Measurement component;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;1919,66137695312 1822,1630859375;null;Model
-link;52991;StickArrow;curved;52987;52989;NoLabel;0;1,0;1,500000119209;APPLICATION
+element;52998;Hexagon;Measure energy consumption;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;1959,87194824219 1765,0302734375;null;Model
+link;52991;StickArrow;curved;54067;52989;NoLabel;0;1,0;1,500000119209;APPLICATION
 link;52990;SharpArrow;curved;52989;52972;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;52989;Circle;Communicate with ESSA;APPLICATION;1,0;false;93,599998474121 47,414390563965;no fill;0,0;0;1749,40600585938 1756,11364746094;null;Model
-link;52988;StickArrow;curved;52987;52976;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;52987;Hexagon;SMA communication component;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;1798,48583984375 1822,1630859375;null;Model
+element;52989;Circle;Communicate with ESSA;APPLICATION;1,0;false;93,599998474121 47,414390563965;no fill;0,0;0;1697,79406738281 1724,05432128906;null;Model
+link;52988;StickArrow;curved;54067;52976;NoLabel;0;1,0;1,500000119209;APPLICATION
 link;52984;NoHead;curved;52983;52981;NoLabel;0;1,0;1,0;APPLICATION
-element;52983;Circle;Process raw data;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;2069,19067382812 1703,70959472656;null;Model
+element;52983;Circle;Process raw data;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;2079,41162109375 1703,70959472656;null;Model
 link;52982;NoHead;curved;52979;52981;NoLabel;0;1,0;1,0;APPLICATION
-element;52981;Circle;empty;APPLICATION;1,0;false;12,938500404358 13,699299812317;solid fill;0,0;0;2043,13745117188 1691,78723144531;null;Model
+element;52981;Circle;empty;APPLICATION;1,0;false;12,938500404358 13,699299812317;solid fill;0,0;0;2055,14697265625 1687,986328125;null;Model
 link;52980;SharpArrow;curved;52981;52971;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;52979;Circle;Gather raw data;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;1958,44470214844 1732,32800292969;null;Model
+element;52979;Circle;Gather raw data;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;1944,11767578125 1693,38232421875;null;Model
 link;52978;SharpArrow;curved;52976;52973;NoLabel;0;1,0;1,500000119209;APPLICATION
 link;52977;StickArrow;curved;52974;52983;NoLabel;0;1,0;1,500000119209;APPLICATION
-element;52976;Circle;Communicate with HEMS;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;1857,48852539062 1750,04357910156;null;Model
-element;52974;Hexagon;Data process component;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;2027,87487792969 1811,921875;null;Model
-element;52973;Circle;Support send energy consumption data to customer;APPLICATION;1,0;false;121,15641784668 61,87833404541;no fill;0,0;0;1869,64721679688 1622,1630859375;null;Model
-element;52972;Circle;Support smart meter communicates with energy supplier;APPLICATION;1,0;false;131,241744995117 69,931701660156;no fill;0,0;0;1739,32055664062 1656,97326660156;null;Model
+element;52976;Circle;Communicate with HEMS;APPLICATION;1,0;false;102,752380371094 42,762573242188;no fill;0,0;0;1840,59033203125 1701,68566894531;null;Model
+element;52974;Hexagon;Generate aggregated billing data;APPLICATION;1,0;false;108,213554382324 41,436443328857;no fill;0,0;0;2025,48596191406 1832,09301757812;null;Model
+element;52973;Circle;Support send energy consumption data to customer;APPLICATION;1,0;false;121,15641784668 61,87833404541;no fill;0,0;0;1884,91528320312 1617,48913574219;null;Model
+element;52972;Circle;Support smart meter communicates with energy supplier;APPLICATION;1,0;false;131,241744995117 69,931701660156;no fill;0,0;0;1750,73522949219 1631,75390625;null;Model
 element;52971;Circle;Support measure energy consumption;APPLICATION;1,0;false;121,15641784668 61,87833404541;no fill;0,0;0;2006,07165527344 1602,47302246094;null;Model
-element;52967;Circle;empty;APPLICATION;1,0;false;736,835998535156 334,804870605469;solid fill;0,0;1;1681,18859863281 1580,35900878906;null;Model
+element;52967;Circle;empty;APPLICATION;1,0;false;736,835998535156 359,346832275391;solid fill;0,0;1;1681,18859863281 1580,35900878906;null;Model
 element;53532;Circle;Energy Supplier Server Application;APPLICATION;1,0;false;100,799995422363 100,799995422363;solid fill;0,0;0;1158,33325195312 1534,72216796875;null;Model
 element;53531;Circle;Energy Supplier Database;APPLICATION;1,0;false;79,200004577637 79,200004577637;solid fill;0,0;0;858,742309570312 1553,8359375;null;Model
 element;53511;AndGate;D;APPLICATION;1,0;false;25,199998855591 13,699299812317;solid fill;0,0;0;1116,7197265625 1556,60473632812;null;Model
@@ -137,26 +150,25 @@ element;53073;Circle;Support Energy supplier communicates with smart meter;APPLI
 link;53072;SharpArrow;curved;53071;52393;NoLabel;1;1,0;1,500000119209;APPLICATION
 element;53071;Circle;Support calculate price;APPLICATION;1,0;false;79,685791015625 52,617530822754;no fill;0,0;0;1276,79406738281 1570,75366210938;null;Model
 element;53066;Circle;empty;APPLICATION;1,0;false;443,293304443359 301,372924804688;solid fill;0,0;1;1192,0 1529,22863769531;null;Model
-element;53985;Circle;support cryptographic control;APPLICATION;1,0;false;180,0 110,0;solid fill;0,0;0;2842,95727539062 1292,75231933594;null;Model
-element;53986;Cloud;(S) high application integrity [Smart Meter Application, support cryptographic control];APPLICATION;1,0;false;209,0 139,0;solid fill;0,0;0;3304,44458007812 1263,75231933594;energy_supplier;Model
-element;53987;Cloud;(S) high application availability [Smart Meter Application, support cryptographic control];APPLICATION;1,0;false;212,0 142,0;solid fill;0,0;0;3043,58984375 1268,0;energy_supplier;Model
-element;53991;Cloud;(S) high application integrity [energy supplier server application, support energy supplier communicates with smart meter];APPLICATION;1,0;false;242,0 172,0;solid fill;0,0;0;3543,82202148438 1226,80053710938;energy_supplier;Model
-element;53993;Cloud;(S) high data confidentiality [energy consumption data, support energy supplier communicates with smart meter];APPLICATION;1,0;false;230,0 160,0;solid fill;0,0;0;3866,66674804688 1226,80053710938;energy_supplier;Model
-link;53990;SharpArrow;curved;53989;53631;NoLabel;0;1,0;1,0;BUSINESS
-element;53641;Rectangle;make;BUSINESS;1,0;false;45,0 27,0;no fill;0,0;0;3198,93359375 992,127746582031;energy_supplier;Model
+element;54087;Cloud;(S) high application integrity [smart meter application, support cryptographic control];APPLICATION;1,0;false;209,0 139,0;solid fill;0,0;0;3346,34155273438 1364,13635253906;energy_supplier;Model
+element;54088;Cloud;(S) high application availability [smart meter application, support cryptographic control];APPLICATION;1,0;false;212,0 142,0;solid fill;0,0;0;3600,0 1350,46142578125;energy_supplier;Model
+element;54092;Cloud;(S) high application integrity [energy supplier server application, support energy supplier communicates with smart meter];APPLICATION;1,0;false;242,0 172,0;solid fill;0,0;0;3869,8564453125 1363,4462890625;energy_supplier;Model
+element;54094;Cloud;(S) high data confidentiality [energy consumption data, support energy supplier communicates with smart meter];APPLICATION;1,0;false;230,0 160,0;solid fill;0,0;0;4148,14794921875 1353,63635253906;energy_supplier;Model
+link;54091;SharpArrow;curved;54090;53631;NoLabel;0;1,0;1,0;BUSINESS
+element;53641;Rectangle;make;BUSINESS;1,0;false;45,0 27,0;no fill;0,0;0;3586,35791015625 1133,05908203125;energy_supplier;Model
 link;53640;StickArrow;curved;53638;53633;make;0;1,0;1,500000119209;BUSINESS
 link;53634;SharpArrow;curved;53633;53629;NoLabel;0;1,0;1,500000119209;BUSINESS
 link;53632;SharpArrow;curved;53631;53627;NoLabel;0;1,0;1,500000119209;BUSINESS
 link;53630;NoHead;curved;53629;53625;NoLabel;0;1,0;1,0;BUSINESS
 link;53628;NoHead;curved;53627;53625;NoLabel;0;1,0;1,0;BUSINESS
 link;53626;SharpArrow;curved;53625;53639;NoLabel;0;1,0;1,500000119209;BUSINESS
-element;53639;Cloud;(S) High Confidentiality [energy consumption data, Collect load info];BUSINESS;1,0;false;212,889953613281 107,829032897949;solid fill;0,0;0;3410,78735351562 520,0;energy_supplier;Model
-element;53625;Circle;empty;BUSINESS;1,0;false;15,0 15,10000038147;solid fill;0,0;0;3509,73217773438 672,706726074219;energy_supplier;Model
-element;53627;Cloud;(S) high confidentiality [energy consumption data, energy supplier communicates with smart meter];BUSINESS;1,0;false;235,27294921875 111,009201049805;solid fill;0,0;0;3548,33862304688 667,223754882812;energy_supplier;Model
-element;53629;Cloud;(S) high confidentiality [energy consumption data, measure energy consumption];BUSINESS;1,0;false;211,198883056641 124,648017883301;solid fill;0,0;0;3282,82763671875 672,706726074219;energy_supplier;Model
-element;53631;Cloud;(S) high data confidentiality [energy consumption data, energy supplier communicates with smart meter];BUSINESS;5,0;false;280,643310546875 105,453636169434;solid fill;0,0;0;3543,82202148438 826,800537109375;energy_supplier;Model
-element;53633;Cloud;(S) high data confidentiality [energy consumption data, measure energy consumption];BUSINESS;5,0;false;218,562393188477 124,648017883301;solid fill;0,0;0;3263,33325195312 849,717651367188;energy_supplier;Model
-element;53638;Hexagon;(S) cryptographic control;BUSINESS;1,0;false;132,969757080078 61,0;solid fill;0,0;0;3043,58984375 1044,15393066406;energy_supplier;Model
+element;53639;Cloud;(S) High Confidentiality [energy consumption data, Collect load info];BUSINESS;1,0;false;212,889953613281 107,829032897949;solid fill;0,0;0;3766,83056640625 645,728576660156;energy_supplier;Model
+element;53625;Circle;empty;BUSINESS;1,0;false;15,0 15,10000038147;solid fill;0,0;0;3865,77563476562 798,435363769531;energy_supplier;Model
+element;53627;Cloud;(S) high confidentiality [energy consumption data, energy supplier communicates with smart meter];BUSINESS;1,0;false;235,27294921875 111,009201049805;solid fill;0,0;0;3904,3818359375 792,952392578125;energy_supplier;Model
+element;53629;Cloud;(S) high confidentiality [energy consumption data, measure energy consumption];BUSINESS;1,0;false;211,198883056641 124,648017883301;solid fill;0,0;0;3638,87084960938 798,435363769531;energy_supplier;Model
+element;53631;Cloud;(S) high data confidentiality [energy consumption data, energy supplier communicates with smart meter];BUSINESS;5,0;false;280,643310546875 105,453636169434;solid fill;0,0;0;3911,85668945312 975,446228027344;energy_supplier;Model
+element;53633;Cloud;(S) high data confidentiality [energy consumption data, measure energy consumption];BUSINESS;5,0;false;218,562393188477 124,648017883301;solid fill;0,0;0;3619,37646484375 975,446228027344;energy_supplier;Model
+element;53638;Hexagon;(S) cryptographic control;BUSINESS;1,0;false;132,969757080078 61,0;solid fill;0,0;0;3449,0087890625 1200,84045410156;energy_supplier;Model
 element;53530;Circle;Energy Supplier;BUSINESS;1,0;false;79,200004577637 79,200004577637;solid fill;0,0;0;1287,78625488281 646,968383789062;null;Model
 element;53529;Circle;Customer;BUSINESS;1,0;false;79,200004577637 79,200004577637;solid fill;0,0;0;2079,1357421875 559,790466308594;null;Model
 element;53528;Circle;Smart Meter;BUSINESS;1,0;false;79,200004577637 79,200004577637;solid fill;0,0;0;1646,93664550781 630,362609863281;null;Model
@@ -255,4 +267,4 @@ link;52376;SharpArrow;curved;52378;52374;NoLabel;0;1,0;1,500000119209;BUSINESS
 link;52375;NoHead;curved;52379;52378;NoLabel;0;1,0;1,0;BUSINESS
 element;52374;Circle;Decide price;BUSINESS;1,0;false;61,0 36,848785400391;no fill;0,0;0;1401,61657714844 706,789855957031;null;Model
 element;52373;Circle;empty;BUSINESS;1,0;false;338,655456542969 290,572937011719;solid fill;0,0;1;1308,28112792969 645,728576660156;null;Model
-element;53989;Circle;empty;BUSINESS;1,0;false;15,0 15,10000038147;solid fill;0,0;0;3676,6435546875 1053,33337402344;null;Model
+element;54090;Circle;empty;BUSINESS;1,0;false;15,0 15,10000038147;solid fill;0,0;0;4060,9755859375 1241,46337890625;null;Model

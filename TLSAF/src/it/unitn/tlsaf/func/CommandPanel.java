@@ -37,8 +37,10 @@ public class CommandPanel extends ApplicationWindow {
 	static public void setup(){
 		// Get the global logger to configure it
 	    logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-	    logger.setLevel(Level.WARNING);
+	    logger.setLevel(Level.SEVERE);
+//	    logger.setLevel(Level.WARNING);
 //	    logger.setLevel(Level.INFO);
+	    
 	}
 	
 	
@@ -454,7 +456,7 @@ public class CommandPanel extends ApplicationWindow {
 						Inference.securityBusToAppTransformation(ms.req_bus_model, ms.req_app_model,
 								Integer.valueOf(object_choice));
 					} else if (layer_choice.equals(InfoEnum.Layer.APPLICATION.name())) {
-						Inference.securityBusToAppTransformation(ms.req_bus_model, ms.req_app_model,
+						Inference.securityAppToPhyTransformation(ms.req_app_model, ms.req_phy_model,
 								Integer.valueOf(object_choice));
 					} else if (layer_choice.equals(InfoEnum.Layer.PHYSICAL.name())) {
 					} else {

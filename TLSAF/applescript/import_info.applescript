@@ -107,7 +107,8 @@ end tell
 --- output graph information
 set append_data to false
 --set target_file to ((path to desktop folder) & "tttest.txt") as string
-set target_file to "Macintosh HD:Users:litong30:research:Trento:Workspace:research:TLSAF:applescript:graph_info.txt"
+set target_file to "Macintosh HD:Users:litong30:research:Trento:Development:TLSAF:applescript:graph_info.txt"
+--"Macintosh HD:Users:litong30:research:Trento:Workspace:research:TLSAF:applescript:graph_info.txt"
 --clear file first
 set empty_data to ""
 write_to_file(empty_data, target_file, append_data)

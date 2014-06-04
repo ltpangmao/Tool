@@ -280,19 +280,27 @@ public class RequirementGraph {
 		 * If they are not missing, it means this link is a  
 		 */
 		
-		//if this is a support link, we don't process for this moment
+		//if this is a support link, we record its sourceID and desId, which will be processed later
 		if(factors.get(2).equals("SharpArrow") & factors.get(7).equals("1")){
-			return null;
+			RequirementLink new_link = new RequirementLink();
+			new_link.setId(factors.get(1));
+			new_link.setType(InfoEnum.RequirementLinkType.SUPPORT.name());
+			new_link.source_id = factors.get(4);
+			new_link.des_id = factors.get(5);
+			// fake elements used to prevent unexpected errors.
+			new_link.setSource(new RequirementElement());
+			new_link.setTarget(new RequirementElement());
+			return new_link;
 		}
 		
 		// obtain the elements of the link
 		// if it is the cross-layer refinements, we don't process it for this moment
+		// Here mainly processes the cross-layer refinements
 		Element source = findElementById(factors.get(4));
 		Element target = findElementById(factors.get(5));
 		if(target == null || source == null){
 			return null;
 		}
-		
 		
 		/*
 		 * this part is exclusively for requirement elements 0)link; 1)id,51690

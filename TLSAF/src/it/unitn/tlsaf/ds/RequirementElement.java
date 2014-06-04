@@ -1,5 +1,7 @@
 package it.unitn.tlsaf.ds;
 
+import it.unitn.tlsaf.func.CommandPanel;
+
 import java.util.LinkedList;
 
 public class RequirementElement implements Element{
@@ -120,7 +122,14 @@ public class RequirementElement implements Element{
 
 	@Override
 	public String getFormalName() {
-		String expression = this.getName();
+		String expression = "";
+		if(this.name!=null){
+			 expression = this.getName();
+		}
+		else{
+			CommandPanel.logger.warning("Element's name is null!");
+			return "null";
+		}
 		
 		expression = expression.replaceAll(" ", "_");
 		return expression.toLowerCase();

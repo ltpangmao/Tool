@@ -425,7 +425,11 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 					s = s.replaceAll("is\\_critical\\(", "");
 					s = s.replaceAll("\\)", "");
 					SecurityGoal critical_sec_goal = (SecurityGoal) req_model.findExhaustiveSecurityGoalByFormalName(s);
-					critical_sec_goal.setCriticality(true);
+					if(critical_sec_goal!=null){
+						critical_sec_goal.setCriticality(true);
+					}else{
+						CommandPanel.logger.severe("critical secuirty goal error!");
+					}
 				}
 				// show the not determined one.
 				else if (s.startsWith("non_deterministic")) {
@@ -1022,6 +1026,9 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 
 	public static void securityBusToAppTransformation(RequirementGraph req_bus_model, RequirementGraph req_app_model, int scope)
 			throws ScriptException, IOException {
+		// complete information for cross-layer links, e.g. support
+		crossLayerFacts(req_bus_model, req_app_model);
+		
 		// process security mechanisms
 		crossLayerSecurityMechanism(req_bus_model, req_app_model, scope);
 
@@ -1030,6 +1037,40 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 
 	}
 	
+	/**
+	 * Complete information for cross-layer links, and output corresponding facts into files. 
+	 * @param req_bus_model
+	 * @param req_app_model
+	 */
+	private static void crossLayerFacts(RequirementGraph req_bus_model,
+			RequirementGraph req_app_model) {
+		// We assume all the cross-layer links are existing in the lower-layer
+		// and they should be already pre-processed when they are first imported.
+		String output = "";
+		for(Link rl: req_app_model.getLinks()){
+			if(rl.getType().equals(InfoEnum.RequirementLinkType.SUPPORT.name())){
+				RequirementLink support = (RequirementLink) rl;
+				
+				Element source = req_app_model.findElementById(support.source_id);
+				Element target = req_bus_model.findElementById(support.des_id);
+				
+				if (source != null) {
+					support.setSource(source);
+					if (target != null) {
+						support.setTarget(target);
+//						output += support.getFormalExpressions() + "\n";
+					} else {
+						CommandPanel.logger.severe("Target element is missing");
+					}
+				} else {
+					CommandPanel.logger.severe("Source element is missing");
+				}
+			}
+		}
+		// after complete the information, the facts of support links can be correctly output 
+	}
+
+
 	/**
 	 * Transferring security concerns from BP layer to APP layer, which focuses on chosen security mechanisms
 	 * This transformation is done via fixed patterns, which do not require further inferences. 
@@ -1123,8 +1164,8 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 		String expression_file1 = up_req_model.generateFormalExpressionToFile(scope);
 		String expression_file2 = down_req_model.generateFormalExpressionToFile(scope);
 
-		String refine_rule = "dlv/dlv -silent -nofacts dlv/rules/cross_layer.rule " + expression_file1 + " "
-				+ expression_file2;
+		String refine_rule = "dlv/dlv -silent -nofacts dlv/rules/cross_layer.rule "
+				+ expression_file1 + " " + expression_file2;
 		// String refine_rule =
 		// "dlv/dlv -silent -nofacts dlv/rules/cross_layer.rule dlv/rules/general.rule dlv/models/req_business_model.dl dlv/models/req_application_model.dl";
 		Runtime rt = Runtime.getRuntime();
@@ -1186,6 +1227,13 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 //		}
 
 		drawAndRefinement(refined_elems);
+	}
+	
+	public static void securityAppToPhyTransformation(
+			RequirementGraph req_app_model, RequirementGraph req_phy_model,
+			Integer valueOf) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
@@ -1344,6 +1392,9 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return encoding.decode(ByteBuffer.wrap(encoded)).toString();
 	}
+
+
+	
 	
 
 	

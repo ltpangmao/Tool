@@ -1,17 +1,20 @@
-% facts about non one-to-ont linkage between tasks and business process activity
-% mapped_to(communicate_with_smart_meters, send_energy_usage_data).
+% facts of software architecture 
+% here we mainly consider the facts regarding to "call" and "execution"
+% the presented facts are only related to the "Smart Meter Application"
 
-% addtional rules to facilitate inference
-% transferred_by(AS, T2) :- transferred_by(AS, T1), mapped_to(T2, T1).
+% call(C1, C2, T, A)
+call(sma_communication_component,data_process_component,dispatch_measurement_requests,energy_consumption_data).
+call(data_processing_component,measurement_component,dispatch_measurement_requests,energy_consumption_data).
+call(data_processing_component,encryption_component,control_data_flow,energy_consumption_data).
+call(essa_communication_component,sma_communication_component,request_energy_consumption_data,energy_consumption_data).
 
-
-
-% facts of business process model
-% here we only consider the name of each object, and ignore its type. 
-% asset related facts
-call(sma_communication_component,data_process_component,energy_measurement,energy_consumption_data).
-call(data_process_component,measurement_component,data_collection,raw_energy_consumption_data).
-call(data_process_component,encryption_component,data_encryption,encrypted_energy_consumption_data).
-call(essa_communication_component,data_process_component,get_energy_usage_info,energy_consumption_data).
 call(price_calculation_component,essa_communication_component,get_energy_usage_info,energy_consumption_data).
 call(price_calculation_component,database_access_component,get_history_info,history_information).
+
+% call(C, T, A)
+exec(sma_communication_component,receive_incoming_queries,query_info).
+exec(sma_communication_component,send_data_back,energy_consumption_data).
+exec(measurement_component,measure_energy_consumption,energy_consumption_data).
+exec(data_processing_component,generate_aggregated_billing_data,aggregated_billing_data).
+exec(encryption_component,encrypt_data,energy_consumption_data).
+%exec(data_processing_component,control_data_flow,energy_consumption_data).

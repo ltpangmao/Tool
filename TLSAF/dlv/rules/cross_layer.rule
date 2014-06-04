@@ -9,13 +9,9 @@ is_treated(SG) :- help(SM, SG).
 
 
 % temporary facts --- application layer facts
-%has(smart_meter_application, support_energy_supplier_communicates_with_smart_meter).
-support(support_energy_supplier_communicates_with_smart_meter, energy_supplier_communicates_with_smart_meter).
+% support(support_energy_supplier_communicates_with_smart_meter, energy_supplier_communicates_with_smart_meter).
 
-%support(support_measure_current_load_info,measure_current_load_info).
-%sec_goal(medium_data_integrity_energy_consumption_data_measure_current_load_info).
-%has_properties(medium_data_integrity_energy_consumption_data_measure_current_load_info,medium,data_integrity,energy_consumption_data,measure_current_load_info.
-%is_critical(medium_data_integrity_energy_consumption_data_measure_current_load_info).
+
 
 
 

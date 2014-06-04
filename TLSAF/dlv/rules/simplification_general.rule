@@ -21,6 +21,17 @@ is_descendent(R1, R2) :- operationalize(R2, R1).
 is_descendent(R1, R2) :- is_descendent(R1, R2), is_descendent(R2, R3).
 
 
+
+%part-of transitive rule
+use(A,AS1):- part_of(AS1,AS2), use(A,AS2).
+maintain(A,AS1):- part_of(AS1,AS2), maintain(A,AS2).
+own(A,AS1):- part_of(AS1,AS2), own(A,AS2).
+data(AS1):- part_of(AS1,AS2), data(AS2).
+service(AS1):- part_of(AS1,AS2), service(AS2).
+application(AS1):- part_of(AS1,AS2), application(AS2).
+hardware(AS1):- part_of(AS1,AS2), hardware(AS2).
+
+
 %Asset Type Applicability rules
 is_not_applicable(SG) :- sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, _), not data(AS).
 is_not_applicable(SG) :- sec_goal(SG), has_properties(SG, _, data_integrity, AS, _), not data(AS).

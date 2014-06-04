@@ -12,10 +12,14 @@ public class RequirementLink implements Link {
 	private RequirementElement target;
 	private RequirementElement attachment;
 	private String remark = InfoEnum.LinkRemark.NORMAL.name(); //used for dealing with special cases
+	
 	//programming sugar...
 	public String refine_type = "";
 	public String trust_level = "";
-
+	
+	public String source_id = "";
+	public String des_id = "";
+	
 	public RequirementLink() {
 		super();
 	}
@@ -112,10 +116,13 @@ public class RequirementLink implements Link {
 			return "";
 		}
 
-		source = this.getSource().getFormalName();
-		target = this.getTarget().getFormalName();
-
-
+		//Get related information
+		if(this.getSource() !=null){
+			source = this.getSource().getFormalName();
+		}
+		if(this.getTarget() != null){
+			target = this.getTarget().getFormalName();
+		}
 		if (this.getAttachment() != null) {
 			attachment = this.getAttachment().getFormalName();
 		}
