@@ -89,6 +89,8 @@ public class ActorAssociationGraph {
 		 * stroke pattern: 0 11) origin: 87.234039306641 1084.06665039062
 		 * 12) owner: xx 13) Canvas, Actor association
 		 */
+		
+		
 		RequirementElement new_actor = new RequirementElement();
 		if(!factors.get(13).equals("Actor association")){
 			CommandPanel.logger.fine("only processing actor association diagram");

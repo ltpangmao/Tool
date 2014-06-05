@@ -1,0 +1,8 @@
+store_data(smart_meter_device,energy_consumption_data).
+sec_goal(high_data_integrity_energy_consumption_data_integrate_a_hardware_encryption_component).
+has_properties(high_data_integrity_energy_consumption_data_integrate_a_hardware_encryption_component,high,data_integrity,energy_consumption_data,integrate_a_hardware_encryption_component).
+use(energy_supplier,smart_meter_device).
+
+
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, high, data_integrity, AS, T), store(HW, AS), use(A, HW).
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, high, data_integrity, AS, T), use(A, HW).

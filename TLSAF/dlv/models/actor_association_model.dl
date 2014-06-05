@@ -1,3 +1,19 @@
+actor(smart_meter_maintainer).
+
+actor(home_gateway).
+
+actor(home_area_network).
+
+actor(smart_appliance).
+
+actor(smart_meter_device).
+
+actor(energy_supplier).
+
+actor(customer).
+
+actor(personal_computer).
+
 actor(third_party_application_provider).
 
 actor(smart_appliance_application).
@@ -24,6 +40,17 @@ actor(smart_meter).
 
 actor(energy_supplier).
 
+trust(energy_supplier,customer,2).
+trust(energy_supplier,customer,2).
+use(customer,smart_meter_device).
+own(customer,smart_appliance).
+own(customer,personal_computer).
+own(customer,home_area_network).
+own(customer,home_gateway).
+trust(energy_supplier,smart_meter_maintainer,4).
+maintain(smart_meter_maintainer,smart_meter_device).
+own(energy_supplier,smart_meter_device).
+trust(customer,energy_supplier,4).
 trust(customer,energy_supplier,4).
 trust(customer,third_party_application_provider,3).
 use(pricing_staff,energy_supplier_database).

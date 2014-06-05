@@ -39,7 +39,7 @@ public class TryOut {
 //			System.out.println(l);
 //		}
 		
-		
+		testDLV();
 		
 	}
 
@@ -49,7 +49,16 @@ public class TryOut {
 	}
 	
 	static void testDLV() throws IOException{
-		String refine_rule = "dlv/dlv -silent -nofacts dlv/rules/cross_layer.rule dlv/models/req_business_model.dl dlv/models/req_application_model.dl";
+		//String refine_rule = "dlv/dlv -silent -nofacts dlv/rules/cross_layer.rule dlv/models/req_business_model.dl dlv/models/req_application_model.dl";
+		String refine_rule = "dlv/dlv -silent -nofacts "
+				+ "dlv/rules/simplification_phy.rule "
+				+ "dlv/rules/simplification_general.rule "
+//				+ "dlv/rules/temp.txt";
+				+ "dlv/models/req_physical_model.dl "
+				+ "dlv/models/software_architecture_model.dl "
+				+ "dlv/models/deployment_model.dl "
+				+ "dlv/models/asset_model.dl "
+				+ "dlv/models/actor_association_model.dl ";
 		Runtime rt = Runtime.getRuntime();
 		Process pr = rt.exec(refine_rule);
 
@@ -59,8 +68,10 @@ public class TryOut {
 		//LinkedList<RequirementLink> new_links = new LinkedList<RequirementLink>();
 		LinkedList<RequirementElement> refined_elems = new LinkedList<RequirementElement>();
 
+//		System.out.println(input.readLine());
+		
 		while ((line = input.readLine()) != null) {
-			String[] temp = line.split(","); 
+			String[] temp = line.split(", "); 
 			for(String result : temp){
 				System.out.println(result);
 			}

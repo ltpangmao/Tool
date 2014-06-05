@@ -157,7 +157,7 @@ public class RequirementGraph {
 		for (Element e : this.getElements()) {
 			if (e.getType().equals(InfoEnum.RequirementElementType.SECURITY_GOAL.name())){
 				SecurityGoal sg = (SecurityGoal)e;
-				if(sg.owner_text.equals("null")){
+				if(sg.owner_text.equals(null)){
 					CommandPanel.logger.severe("Missing the ownership of security goal "+sg.getName());
 				} else{
 					sg.owner= new Actor();
@@ -448,7 +448,7 @@ public class RequirementGraph {
 					double distance = Math.sqrt((elem.origin_x - boundary.origin_x)
 							* (elem.origin_x - boundary.origin_x) + (elem.origin_y - boundary.origin_y)
 							* (elem.origin_y - boundary.origin_y));
-					if (distance < 60) {
+					if (distance < 150) {
 						actor.setBoundary(boundary);
 						break;
 					}

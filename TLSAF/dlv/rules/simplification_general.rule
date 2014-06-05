@@ -20,9 +20,12 @@ is_descendent(R1, R2) :- refine(R2, R1).
 is_descendent(R1, R2) :- operationalize(R2, R1).
 is_descendent(R1, R2) :- is_descendent(R1, R2), is_descendent(R2, R3).
 
+%permission transitive rules
+use(A,AS) :- maintain(A,AS).
+maintain(A,AS) :- own(A,AS).
 
 
-%part-of transitive rule
+%part-of transitive rules
 use(A,AS1):- part_of(AS1,AS2), use(A,AS2).
 maintain(A,AS1):- part_of(AS1,AS2), maintain(A,AS2).
 own(A,AS1):- part_of(AS1,AS2), own(A,AS2).

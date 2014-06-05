@@ -80,7 +80,7 @@ public class CommandPanel extends ApplicationWindow {
 		//Layer setting
 		final Group grpLayer = new Group(container, SWT.NONE);
 		grpLayer.setText("Layer");
-		grpLayer.setBounds(10, 21, 196, 88);
+		grpLayer.setBounds(32, 163, 196, 88);
 		
 		Button btnBusiness = new Button(grpLayer, SWT.RADIO);
 		btnBusiness.setBounds(10, 33, 69, 18);
@@ -102,7 +102,7 @@ public class CommandPanel extends ApplicationWindow {
 		
 		final Group grpObjects = new Group(container, SWT.NONE);
 		grpObjects.setText("Object");
-		grpObjects.setBounds(236, 21, 140, 88);
+		grpObjects.setBounds(234, 163, 140, 88);
 		
 		Button btnSelectedElements_1 = new Button(grpObjects, SWT.RADIO);
 		btnSelectedElements_1.setBounds(10, 34, 109, 18);
@@ -124,7 +124,7 @@ public class CommandPanel extends ApplicationWindow {
 				MessageDialog.openInformation(container.getShell(), "Message", "Delete all models!");
 			}
 		});
-		btnDeleteAll.setBounds(428, 32, 94, 26);
+		btnDeleteAll.setBounds(380, 74, 94, 42);
 		btnDeleteAll.setText("Delete all");
 
 		Button btnPrintModel = new Button(container, SWT.NONE);
@@ -151,13 +151,13 @@ public class CommandPanel extends ApplicationWindow {
 				}
 			}
 		});
-		btnPrintModel.setBounds(428, 64, 94, 26);
+		btnPrintModel.setBounds(380, 122, 94, 42);
 		btnPrintModel.setText("Print model");
 		
 		//import function
 		final Group grpImport = new Group(container, SWT.NONE);
 		grpImport.setText("Import Source");
-		grpImport.setBounds(10, 129, 151, 88);
+		grpImport.setBounds(32, 50, 151, 88);
 		
 		Button btnSelectedElements = new Button(grpImport, SWT.RADIO);
 		btnSelectedElements.setBounds(10, 10, 132, 18);
@@ -170,7 +170,7 @@ public class CommandPanel extends ApplicationWindow {
 		
 		final Group grpModel = new Group(container, SWT.NONE);
 		grpModel.setText("Model Type");
-		grpModel.setBounds(167, 129, 168, 86);
+		grpModel.setBounds(189, 50, 168, 86);
 		
 		Button btnRequirementModel = new Button(grpModel, SWT.RADIO);
 		btnRequirementModel.setBounds(10, 10, 134, 18);
@@ -222,13 +222,13 @@ public class CommandPanel extends ApplicationWindow {
 			}
 		});
 		
-		btnImport.setBounds(428, 172, 94, 26);
+		btnImport.setBounds(380, 26, 94, 42);
 		btnImport.setText("Import");
 		
 		//Refinement function
 		final Group grpRefinementMode = new Group(container, SWT.NONE);
 		grpRefinementMode.setText("Refinement Mode");
-		grpRefinementMode.setBounds(156, 223, 118, 98);
+		grpRefinementMode.setBounds(13, 305, 118, 86);
 		
 		Button btnOnestep = new Button(grpRefinementMode, SWT.RADIO);
 		btnOnestep.setBounds(10, 10, 91, 18);
@@ -241,7 +241,7 @@ public class CommandPanel extends ApplicationWindow {
 		
 		final Group grpRefinementDimension = new Group(container, SWT.NONE);
 		grpRefinementDimension.setText("Refinement Dimension");
-		grpRefinementDimension.setBounds(10, 223, 140, 98);
+		grpRefinementDimension.setBounds(13, 397, 140, 98);
 		
 		Button btnAttribute = new Button(grpRefinementDimension, SWT.RADIO);
 		btnAttribute.setBounds(10, 10, 91, 18);
@@ -257,9 +257,9 @@ public class CommandPanel extends ApplicationWindow {
 		btnInterval.setText("Interval");
 		
 		final Group grpVisualization = new Group(container, SWT.NONE);
-		grpVisualization.setBounds(280, 221, 131, 98);
+		grpVisualization.setBounds(13, 501, 131, 98);
 		grpVisualization.setText("Visualization");
-//		grpVisualization.setVisible(false);
+		grpVisualization.setVisible(false);
 
 		Button btnOmnigraffle = new Button(grpVisualization, SWT.RADIO);
 		btnOmnigraffle.setBounds(10, 10, 91, 18);
@@ -331,8 +331,8 @@ public class CommandPanel extends ApplicationWindow {
 				}
 			}
 		});
-		btnRefine.setBounds(428, 251, 94, 26);
-		btnRefine.setText("Refine");
+		btnRefine.setBounds(29, 257, 94, 42);
+		btnRefine.setText("Step1:\nRefine");
 		
 		//simplification
 		Button btnSimplify = new Button(container, SWT.NONE);
@@ -364,9 +364,12 @@ public class CommandPanel extends ApplicationWindow {
 				}
 			}
 		});
-		btnSimplify.setBounds(428, 283, 94, 26);
-		btnSimplify.setText("Simplify");
+		btnSimplify.setBounds(131, 257, 94, 42);
+		btnSimplify.setText("Step2:\nSimplify");
 		
+		final List alternative_list = new List(container, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		alternative_list.setBounds(159, 305, 311, 300);
+		 ScrollBar sb = alternative_list.getVerticalBar();
 		
 		Button btnOperationalize = new Button(container, SWT.NONE);
 		btnOperationalize.addSelectionListener(new SelectionAdapter() {
@@ -374,6 +377,8 @@ public class CommandPanel extends ApplicationWindow {
 			public void widgetSelected(SelectionEvent e) {
 				String layer_choice = getCommand(grpLayer);
 				String object_choice = getCommand(grpObjects);
+				// merge the alternative calculation method into the  
+				LinkedList<String> alternatives = null;
 				try {
 					if (layer_choice.equals(InfoEnum.Layer.ALL.name())) {
 						Inference.securityGoalOperationalization(ms.req_bus_model, Integer.valueOf(object_choice));
@@ -381,13 +386,25 @@ public class CommandPanel extends ApplicationWindow {
 						Inference.securityGoalOperationalization(ms.req_phy_model, Integer.valueOf(object_choice));
 					} else if (layer_choice.equals(InfoEnum.Layer.BUSINESS.name())) {
 						Inference.securityGoalOperationalization(ms.req_bus_model, Integer.valueOf(object_choice));
+						alternatives = Inference.securityAlternativeSolutions(ms.req_bus_model,
+								Integer.valueOf(object_choice));
 					} else if (layer_choice.equals(InfoEnum.Layer.APPLICATION.name())) {
 						Inference.securityGoalOperationalization(ms.req_app_model, Integer.valueOf(object_choice));
+						alternatives = Inference.securityAlternativeSolutions(ms.req_app_model,
+								Integer.valueOf(object_choice));
 					} else if (layer_choice.equals(InfoEnum.Layer.PHYSICAL.name())) {
 						Inference.securityGoalOperationalization(ms.req_phy_model, Integer.valueOf(object_choice));
+						alternatives = Inference.securityAlternativeSolutions(ms.req_phy_model,
+								Integer.valueOf(object_choice));
 					} else {
 						CommandPanel.logger.severe("Layer selection error!");
 					}
+					
+					alternative_list.removeAll();
+					for (String s: alternatives){
+						alternative_list.add(s);
+					}
+					
 					//TODO: customize the size of the dialog
 					MessageDialog.openInformation(container.getShell(), "Message", "Finish Operationalization of critical security goals!");
 				} catch (IOException e1) {
@@ -397,18 +414,17 @@ public class CommandPanel extends ApplicationWindow {
 				}
 			}
 		});
-		btnOperationalize.setBounds(428, 361, 94, 42);
-		btnOperationalize.setText("Operationalize");
+		btnOperationalize.setBounds(231, 257, 108, 42);
+		btnOperationalize.setText("Step3:\nOperationalize");
 		
-		final List alternative_list = new List(container, SWT.V_SCROLL|SWT.H_SCROLL);
-		alternative_list.setBounds(10, 361, 378, 177);
-		 ScrollBar sb = alternative_list.getVerticalBar();
+
 		
 //		JScrollPane listScroller = new JScrollPane(alternative_list);
 //		listScroller.setPreferredSize(new Dimension(250, 80));
 		
 		
 		Button btnCalculateAlternatives = new Button(container, SWT.NONE);
+		btnCalculateAlternatives.setVisible(false);
 		btnCalculateAlternatives.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -438,8 +454,8 @@ public class CommandPanel extends ApplicationWindow {
 				MessageDialog.openInformation(container.getShell(), "Message", "Identify alternative security solutions!");
 			}
 		});
-		btnCalculateAlternatives.setBounds(428, 423, 94, 42);
-		btnCalculateAlternatives.setText("Alternative\n Solutions");
+		btnCalculateAlternatives.setBounds(592, 112, 94, 42);
+		btnCalculateAlternatives.setText("Step\nAlternative\n Solutions");
 		
 		
 		Button btnTransferSecurityConcerns = new Button(container, SWT.NONE);
@@ -451,7 +467,10 @@ public class CommandPanel extends ApplicationWindow {
 				LinkedList<String> alternatives = null;
 				try {
 					if (layer_choice.equals(InfoEnum.Layer.ALL.name())) {
-						//TODO: we currently transfer security concerns only within one layer.
+						Inference.securityBusToAppTransformation(ms.req_bus_model, ms.req_app_model,
+								Integer.valueOf(object_choice));
+						Inference.securityAppToPhyTransformation(ms.req_app_model, ms.req_phy_model,
+								Integer.valueOf(object_choice));
 					} else if (layer_choice.equals(InfoEnum.Layer.BUSINESS.name())) {
 						Inference.securityBusToAppTransformation(ms.req_bus_model, ms.req_app_model,
 								Integer.valueOf(object_choice));
@@ -469,8 +488,24 @@ public class CommandPanel extends ApplicationWindow {
 				MessageDialog.openInformation(container.getShell(), "Message", "Transfer security concerns to the application layer!");
 			}
 		});
-		btnTransferSecurityConcerns.setBounds(428, 492, 94, 42);
-		btnTransferSecurityConcerns.setText("Transfer Security\n Concerns");
+		btnTransferSecurityConcerns.setBounds(345, 257, 118, 42);
+		btnTransferSecurityConcerns.setText("Step 4: Transfer \nsecurity concerns");
+		
+		Label lblCommonOperationParameters = new Label(container, SWT.NONE);
+		lblCommonOperationParameters.setBounds(32, 150, 183, 14);
+		lblCommonOperationParameters.setText("Common operation parameters");
+		
+		Label lblOperationSeparator = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
+		lblOperationSeparator.setText("operation separator");
+		lblOperationSeparator.setBounds(32, 144, 168, 10);
+		
+		Label lblImportSeparator = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
+		lblImportSeparator.setText("import separator");
+		lblImportSeparator.setBounds(32, 18, 168, 14);
+		
+		Label lblImportParameters = new Label(container, SWT.NONE);
+		lblImportParameters.setBounds(32, 26, 121, 14);
+		lblImportParameters.setText("Import parameters");
 		
 		
 		
@@ -666,6 +701,6 @@ public class CommandPanel extends ApplicationWindow {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(731, 689);
+		return new Point(480, 682);
 	}
 }

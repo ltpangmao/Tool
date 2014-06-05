@@ -42,7 +42,7 @@ public class InfoEnum {
 	static {
 		esg_canvas.put(InfoEnum.Layer.BUSINESS.name(), "Business SG");
 		esg_canvas.put(InfoEnum.Layer.APPLICATION.name(), "Application SG");
-		esg_canvas.put(InfoEnum.Layer.PHYSICAL.name(), "Pysical SG");
+		esg_canvas.put(InfoEnum.Layer.PHYSICAL.name(), "Physical SG");
 	}
 	
 	// determine type of scanned shape

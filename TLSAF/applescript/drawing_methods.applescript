@@ -30,9 +30,12 @@ set link_id to 43426
 --add_user_data(target_canvas_name, target_layer_name, target_id, owner)
 --change_element_attribute(target_canvas_name, target_layer_name, target_id, thick_value, color_value, layer_value)
 --change_link_attribute(target_canvas_name, target_layer_name, link_id, thick_value, color_value, layer_value)
-get_selected_graph()
+--get_selected_graph()
 
+set target_canvas_name to "Model"
+set target_layer_name to "APPLICATION"
 
+add_user_data(target_canvas_name, target_layer_name, "54201", "energy_supplier")
 
 ---methods
 on draw_isolated_element(target_canvas_name, target_layer_name, target_size, target_name, target_text, target_origin, corner_ridius)
@@ -140,7 +143,7 @@ on add_user_data(target_canvas_name, target_layer_name, target_id, owner)
 				set value of user data item "owner" of target_element to owner
 				return "success"
 			on error
-				return "error" & text of currentShape
+				return "error" --& text of target_element
 			end try
 		end tell
 	end tell

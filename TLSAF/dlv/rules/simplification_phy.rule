@@ -1,0 +1,48 @@
+% Temporarily adding facts(also some rules), which ideally would be extracted from particular models
+
+% Auxiliary rules (leaf & descendent) --- see the simplification_general file.
+
+%Critical Security Goal Identification rules --- see the simplification_general file.
+
+%Asset Type Applicability rules --- see the simplification_general file.
+
+
+%Application layer auxiliary rule
+involve_data(T,AS):- call(C1,C2,T,AS).
+involve_data(T,AS):- exec(C,T,AS).
+%involve_component(T,C1) :- call(C1,C2,T,AS).
+%involve_component(T,C2) :- call(C1,C2,T,AS).
+%involve_component(T,C) :- exec(C,T,AS).
+
+%Physical layer auxiliary rule
+store_data(HW,AS) :- deploy(APP,HW), involve_data(T,AS), data(AS), support(G,T), has(HW,G).
+involve_hardware(T,HW) :- has(HW,T), hardware(HW).
+%connect(HW2,HW1) :- connect(HW1,HW2), not connect(HW2,HW1).
+
+
+%new rule 1
+is_applicable(SG) :- store_data(HW, AS), sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T), hardware(HW), not is_not_applicable(SG).
+is_applicable(SG) :- store_data(HW, AS), sec_goal(SG), has_properties(SG, _, data_integrity, AS, T), hardware(HW), not is_not_applicable(SG).
+
+%new rule 2
+is_applicable(SG) :- involve_hardware(T, AS), sec_goal(SG), has_properties(SG, _, hardware_integrity, AS, T), not is_not_applicable(SG).
+is_applicable(SG) :- involve_hardware(T, AS), sec_goal(SG), has_properties(SG, _, hardware_availability, AS, T), not is_not_applicable(SG).
+
+%Physical layer potential threat analysis rules. We suppose only the dependency causes potential damage.
+% Here the rules mainly consider the "interval", and pay no attention to the asset,   
+%poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T), store_data(HW1, AS), connect(HW1,HW2),use(A, HW2). 
+%poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_integrity, AS, T), store_data(HW1, AS), connect(HW1,HW2),use(A, HW2). 
+
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T), store_data(HW, AS), use(A, HW).
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_integrity, AS, T), store_data(HW, AS), use(A, HW).
+
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, hardware_integrity, HW, T), use(A, HW).
+
+poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, hardware_availability, HW, T), use(A, HW).
+
+%poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T), store_data(HW,AS), maintain(A, HW). 
+%poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_integrity, AS, T), store(HW,AS), maintain(A, HW).
+%poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_confidentiality, AS, T), store(HW,AS), own(A, HW).
+%poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, data_integrity, AS, T), store(HW,AS), own(A, HW).
+%poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, hardware_integrity, HW, T), own(A, HW).
+%poss_impair(A, SG) :- sec_goal(SG), has_properties(SG, _, hardware_availability, HW, T), own(A, HW).

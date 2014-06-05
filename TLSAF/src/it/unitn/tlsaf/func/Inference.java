@@ -81,6 +81,8 @@ public class Inference {
 		
 		String result = readFile("applescript/graph_info.txt", Charset.defaultCharset());
 		actor_model.importGraphInfo(result);
+		
+		//writeFile("dlv/models/actor_association_model.dl", actor_model.generateFormalExpression());
 		CommandPanel.logger.info(actor_model.generateFormalExpression());
 	}
 
@@ -403,7 +405,10 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 					+ "dlv/models/software_architecture_model.dl " + "dlv/models/asset_model.dl "
 					+ ex_req_model_file + " " + actor_model_file;
 		} else if (req_model.getLayer().equals(InfoEnum.Layer.PHYSICAL.name())) {
-			inference_rule = " " + ex_req_model_file;
+			inference_rule = "dlv/dlv -silent -nofacts "
+					+ "dlv/rules/simplification_phy.rule dlv/rules/simplification_general.rule "
+					+ "dlv/models/deployment_model.dl dlv/models/asset_model.dl " 
+					+ ex_req_model_file + " " + actor_model_file;
 		} else {
 			CommandPanel.logger.severe("Error refinement type!");
 		}
@@ -562,10 +567,7 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 
 		graph += "}";
 
-		String output = "graphviz/sec_goal_"+visualization+".gv";
-		PrintWriter writer = new PrintWriter(output, "UTF-8");
-		writer.println(graph);
-		writer.close();
+		writeFile("graphviz/sec_goal_"+visualization+".gv", graph);
 
 		//draw pdf figure for the corresponding graph
 		Runtime rt;
@@ -622,10 +624,7 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 
 		graph += "}";
 
-		String output = "graphviz/sec_goal.gv";
-		PrintWriter writer = new PrintWriter(output, "UTF-8");
-		writer.println(graph);
-		writer.close();
+		writeFile("graphviz/sec_goal.gv", graph);
 
 		//draw pdf figure for the corresponding graph
 		Runtime rt;
@@ -800,7 +799,10 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 					
 			//+ "dlv/rules/sec_goal_ownership.rule " + "dlv/models/temp_app_fact.dl " 
 		} else if (req_model.getLayer().equals(InfoEnum.Layer.PHYSICAL.name())) {
-			inference_rule = " " + req_model_file;
+			inference_rule = "dlv/dlv -silent -nofacts " + "dlv/rules/simplification_phy.rule "
+					+ "dlv/rules/simplification_general.rule " + "dlv/models/deployment_model.dl "
+					+ "dlv/models/software_architecture_model.dl " // infer additional knowledge from software 
+					+ "dlv/models/asset_model.dl " + req_model_file + " " + actor_model_file;
 		} else {
 			CommandPanel.logger.severe("Error refinement type!");
 		}
@@ -1033,26 +1035,26 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 		crossLayerSecurityMechanism(req_bus_model, req_app_model, scope);
 
 		// process untreated security goals
-		crossLayerSecurityGoalBUSAPP(req_bus_model, req_app_model, scope);
+		crossLayerSecurityGoal(req_bus_model, req_app_model, scope);
 
 	}
 	
 	/**
 	 * Complete information for cross-layer links, and output corresponding facts into files. 
-	 * @param req_bus_model
-	 * @param req_app_model
+	 * @param up_req_model
+	 * @param down_req_model
 	 */
-	private static void crossLayerFacts(RequirementGraph req_bus_model,
-			RequirementGraph req_app_model) {
+	private static void crossLayerFacts(RequirementGraph up_req_model,
+			RequirementGraph down_req_model) {
 		// We assume all the cross-layer links are existing in the lower-layer
 		// and they should be already pre-processed when they are first imported.
 		String output = "";
-		for(Link rl: req_app_model.getLinks()){
+		for(Link rl: down_req_model.getLinks()){
 			if(rl.getType().equals(InfoEnum.RequirementLinkType.SUPPORT.name())){
 				RequirementLink support = (RequirementLink) rl;
 				
-				Element source = req_app_model.findElementById(support.source_id);
-				Element target = req_bus_model.findElementById(support.des_id);
+				Element source = down_req_model.findElementById(support.source_id);
+				Element target = up_req_model.findElementById(support.des_id);
 				
 				if (source != null) {
 					support.setSource(source);
@@ -1083,45 +1085,49 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 	private static void crossLayerSecurityMechanism(RequirementGraph up_req_model, RequirementGraph down_req_model, int scope)
 			throws ScriptException, IOException {
 
+		String layer_tag = "";
+		if(up_req_model.getLayer().equals(InfoEnum.Layer.BUSINESS.name())){
+			layer_tag = "application";
+		} else if (up_req_model.getLayer().equals(InfoEnum.Layer.APPLICATION.name())){
+			layer_tag = "hardware";
+		} else{
+			CommandPanel.logger.severe("Unexpected layer!");
+		}
+		
 		for (Link rl : up_req_model.getLinks()) {
 			// logically processing
 			if (rl.getType().equals(InfoEnum.RequirementLinkType.HELP.name())
 					|| rl.getType().equals(InfoEnum.RequirementLinkType.MAKE.name())) {
-				// first add the functional goal in the application layer
-				
-//				RequirementElement sm = new RequirementElement(rl.getSource().getName(),
-//						InfoEnum.RequirementElementType.SECURITY_MECHANISM.name(), InfoEnum.Layer.APPLICATION.name());
-				
 				RequirementElement sm = (RequirementElement) rl.getSource();
-						
 				RequirementElement sm_goal = new RequirementElement("support " + rl.getSource().getName(),
-						InfoEnum.RequirementElementType.GOAL.name(), InfoEnum.Layer.APPLICATION.name());
+						InfoEnum.RequirementElementType.GOAL.name(), down_req_model.getLayer());
 				RequirementLink support_sm1 = new RequirementLink(InfoEnum.RequirementLinkType.SUPPORT.name(), sm_goal,
 						sm);
 				
 				// add related security goals
-				SecurityGoal bus_sg = (SecurityGoal) rl.getTarget();
-				SecurityGoal app_sg1 = new SecurityGoal(bus_sg.getImportance(), "application integrity",
-						"corresponding application", sm_goal.getName(),
-						InfoEnum.RequirementElementType.SECURITY_GOAL.name(), InfoEnum.Layer.APPLICATION.name());
-				if (bus_sg.owner != null) {
-					bus_sg.owner.getOwnedElement().add(app_sg1);
-					app_sg1.owner = bus_sg.owner;
+				SecurityGoal up_sg = (SecurityGoal) rl.getTarget();
+				
+				SecurityGoal down_sg1 = new SecurityGoal(up_sg.getImportance(), layer_tag+" integrity",
+						"corresponding "+layer_tag, sm_goal.getName(),
+						InfoEnum.RequirementElementType.SECURITY_GOAL.name(), down_req_model.getLayer());
+				if (up_sg.owner != null) {
+					up_sg.owner.getOwnedElement().add(down_sg1);
+					down_sg1.owner = up_sg.owner;
 				}
 
-				SecurityGoal app_sg2 = new SecurityGoal(bus_sg.getImportance(), "application availability",
-						"corresponding application", sm_goal.getName(),
-						InfoEnum.RequirementElementType.SECURITY_GOAL.name(), InfoEnum.Layer.APPLICATION.name());
-				if (bus_sg.owner != null) {
-					bus_sg.owner.getOwnedElement().add(app_sg2);
-					app_sg2.owner = bus_sg.owner;
+				SecurityGoal down_sg2 = new SecurityGoal(up_sg.getImportance(), layer_tag+" availability",
+						"corresponding "+layer_tag, sm_goal.getName(),
+						InfoEnum.RequirementElementType.SECURITY_GOAL.name(), down_req_model.getLayer());
+				if (up_sg.owner != null) {
+					up_sg.owner.getOwnedElement().add(down_sg2);
+					down_sg2.owner = up_sg.owner;
 				}
 
 				down_req_model.getLinks().add(support_sm1);
 //				req_app_model.getElements().add(sm);
 				down_req_model.getElements().add(sm_goal);
-				down_req_model.getElements().add(app_sg1);
-				down_req_model.getElements().add(app_sg2);
+				down_req_model.getElements().add(down_sg1);
+				down_req_model.getElements().add(down_sg2);
 				
 				
 				// graphical processing
@@ -1132,16 +1138,16 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 				// draw new elements
 				id = AppleScript.drawRequirementElement(sm_goal, sm, "down");
 				sm_goal.setId(id);
-				id = AppleScript.drawRequirementElement(app_sg1, sm, "down");
-				app_sg1.setId(id);
-				id = AppleScript.drawRequirementElement(app_sg2, sm, "down");
-				app_sg2.setId(id);
+				id = AppleScript.drawRequirementElement(down_sg1, sm, "down");
+				down_sg1.setId(id);
+				id = AppleScript.drawRequirementElement(down_sg2, sm, "down");
+				down_sg2.setId(id);
 				
 				//add mouse-over annotation
-				AppleScript.addUserData(InfoEnum.REQ_TARGET_CANVAS, app_sg1.getLayer(), app_sg1.getId(),
-						app_sg1.owner.getName());
-				AppleScript.addUserData(InfoEnum.REQ_TARGET_CANVAS, app_sg2.getLayer(), app_sg2.getId(),
-						app_sg2.owner.getName());
+				AppleScript.addUserData(InfoEnum.REQ_TARGET_CANVAS, down_sg1.getLayer(), down_sg1.getId(),
+						down_sg1.owner.getName());
+				AppleScript.addUserData(InfoEnum.REQ_TARGET_CANVAS, down_sg2.getLayer(), down_sg2.getId(),
+						down_sg2.owner.getName());
 				
 				// draw new links
 				id = AppleScript.drawRequirementLink(support_sm1, InfoEnum.CROSS_LAYERS);
@@ -1158,13 +1164,14 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 	 * @throws IOException
 	 * @throws ScriptException
 	 */
-	private static void crossLayerSecurityGoalBUSAPP(RequirementGraph up_req_model, RequirementGraph down_req_model, int scope)
+	private static void crossLayerSecurityGoal(RequirementGraph up_req_model, RequirementGraph down_req_model, int scope)
 			throws IOException, ScriptException {
 		//TODO: revise here
 		String expression_file1 = up_req_model.generateFormalExpressionToFile(scope);
 		String expression_file2 = down_req_model.generateFormalExpressionToFile(scope);
 
 		String refine_rule = "dlv/dlv -silent -nofacts dlv/rules/cross_layer.rule "
+				+ "dlv/models/asset_model.dl "
 				+ expression_file1 + " " + expression_file2;
 		// String refine_rule =
 		// "dlv/dlv -silent -nofacts dlv/rules/cross_layer.rule dlv/rules/general.rule dlv/models/req_business_model.dl dlv/models/req_application_model.dl";
@@ -1213,10 +1220,8 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 				}
 			}
 		}
-
 		
 		String position="";
-
 		
 //		for (RequirementElement sg : refined_elems) {
 //			// add the new elements below the refined sg.
@@ -1229,153 +1234,21 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 		drawAndRefinement(refined_elems);
 	}
 	
-	public static void securityAppToPhyTransformation(
-			RequirementGraph req_app_model, RequirementGraph req_phy_model,
-			Integer valueOf) {
-		// TODO Auto-generated method stub
+	public static void securityAppToPhyTransformation (RequirementGraph req_app_model, RequirementGraph req_phy_model,
+			Integer scope) throws ScriptException, IOException {
+		// complete information for cross-layer links, e.g. support
+		crossLayerFacts(req_app_model, req_phy_model);
+			
+		// process security mechanisms
+//		crossLayerSecurityMechanism(req_app_model, req_phy_model, scope);
+
+		// process untreated security goals
+		crossLayerSecurityGoal(req_app_model, req_phy_model, scope);
+
 		
 	}
-	
-	
-	@Deprecated 
-	private static void crossLayerSecurityGoalSingleTaskDifferentCanvas(RequirementGraph up_req_model, RequirementGraph down_req_model, int scope)
-			throws IOException, ScriptException {
-		//TODO: revise here
-		String expression_file1 = up_req_model.generateFormalExpressionToFile(scope);
-		String expression_file2 = down_req_model.generateFormalExpressionToFile(scope);
 
-		String refine_rule = "dlv/dlv -silent -nofacts dlv/rules/cross_layer.rule " + expression_file1 + " "
-				+ expression_file2;
-		// String refine_rule =
-		// "dlv/dlv -silent -nofacts dlv/rules/cross_layer.rule dlv/rules/general.rule dlv/models/req_business_model.dl dlv/models/req_application_model.dl";
-		Runtime rt = Runtime.getRuntime();
-		Process pr = rt.exec(refine_rule);
 
-		BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
-		String line = null;
-
-		//LinkedList<RequirementLink> new_links = new LinkedList<RequirementLink>();
-		LinkedList<RequirementElement> refined_elems = new LinkedList<RequirementElement>();
-
-		while ((line = input.readLine()) != null) {
-			// line = input.readLine();
-			line = line.substring(1, line.length() - 1);
-			String[] result = line.split(", ");
-			for (String s : result) {
-				//				System.out.println(s);
-				if (s.startsWith("refined_sec_goal")) {
-					// parse facts
-					s = s.replaceAll("refined_sec_goal\\(", "");
-					s = s.replaceAll("\\)", "");
-					String[] sg = s.split(",");
-					// create new element
-					SecurityGoal refined_goal = (SecurityGoal) up_req_model.findElementByFormalName(sg[4]);
-					if (refined_goal.next_layer_copy == null) {
-						refined_goal.next_layer_copy = new SecurityGoal(refined_goal.getImportance(),
-								refined_goal.getSecurityAttribute(), refined_goal.getAsset(),
-								refined_goal.getInterval(), refined_goal.getType(), down_req_model.getLayer());
-						refined_goal.next_layer_copy.owner = refined_goal.owner;
-					}
-					SecurityGoal new_sg = new SecurityGoal(sg[0], sg[1], sg[2], sg[3],
-							InfoEnum.RequirementElementType.SECURITY_GOAL.name(), down_req_model.getLayer());
-					// propagate the owner of security goal to its refinements. 
-					if (refined_goal.owner != null) {
-						refined_goal.owner.getOwnedElement().add(new_sg);
-						new_sg.owner = refined_goal.owner;
-					}
-
-					down_req_model.getElements().add(new_sg);
-					if (down_req_model.getElements().indexOf(refined_goal.next_layer_copy) == -1) {
-						down_req_model.getElements().add(refined_goal.next_layer_copy);
-					}
-					// create new link
-					RequirementLink new_and_refine = new RequirementLink(
-							InfoEnum.RequirementLinkType.AND_REFINE.name(), new_sg, refined_goal.next_layer_copy);
-					down_req_model.getLinks().add(new_and_refine);
-
-					refined_goal.next_layer_copy.and_refine_links.add(new_and_refine);
-					if (refined_elems.indexOf(refined_goal.next_layer_copy) == -1) {
-						refined_elems.add(refined_goal.next_layer_copy);
-					}
-				}
-			}
-		}
-
-		for (RequirementElement sg : refined_elems) {
-			String id = AppleScript.drawArbitraryRequirementElement(InfoEnum.REQ_TARGET_CANVAS, sg.getLayer(), "Cloud", InfoEnum.NORMAL_SIZE, "{2000, 100}", "0",
-					"(S)\n" + sg.getName());
-			sg.setId(id);
-		}
-
-		drawAndRefinement(refined_elems);
-	}
-
-	/**
-	 * @param req_bus_model
-	 * @param req_app_model
-	 * @throws ScriptException
-	 * @throws IOException 
-	 */
-	@Deprecated
-	private static void crossLayerSecurityMechanismSingleTaskDifferentCanvas(RequirementGraph req_bus_model, RequirementGraph req_app_model, int scope)
-			throws ScriptException, IOException {
-
-		for (Link rl : req_bus_model.getLinks()) {
-			// logically processing
-			if (rl.getType().equals(InfoEnum.RequirementLinkType.HELP.name())
-					|| rl.getType().equals(InfoEnum.RequirementLinkType.MAKE.name())) {
-				// first add the functional goal in the application layer
-				RequirementElement sm = new RequirementElement(rl.getSource().getName(),
-						InfoEnum.RequirementElementType.SECURITY_MECHANISM.name(), InfoEnum.Layer.APPLICATION.name());
-				RequirementElement sm_goal = new RequirementElement("support " + rl.getSource().getName(),
-						InfoEnum.RequirementElementType.GOAL.name(), InfoEnum.Layer.APPLICATION.name());
-				RequirementLink support_sm1 = new RequirementLink(InfoEnum.RequirementLinkType.SUPPORT.name(), sm_goal,
-						sm);
-				// add related security goals
-				SecurityGoal bus_sg = (SecurityGoal) rl.getTarget();
-				SecurityGoal app_sg1 = new SecurityGoal(bus_sg.getImportance(), "application integrity",
-						"corresponding application", sm_goal.getName(),
-						InfoEnum.RequirementElementType.SECURITY_GOAL.name(), InfoEnum.Layer.APPLICATION.name());
-				if (bus_sg.owner != null) {
-					bus_sg.owner.getOwnedElement().add(app_sg1);
-					app_sg1.owner = bus_sg.owner;
-				}
-
-				SecurityGoal app_sg2 = new SecurityGoal(bus_sg.getImportance(), "application availability",
-						"corresponding application", sm_goal.getName(),
-						InfoEnum.RequirementElementType.SECURITY_GOAL.name(), InfoEnum.Layer.APPLICATION.name());
-				if (bus_sg.owner != null) {
-					bus_sg.owner.getOwnedElement().add(app_sg2);
-					app_sg2.owner = bus_sg.owner;
-				}
-
-				req_app_model.getLinks().add(support_sm1);
-				req_app_model.getElements().add(sm);
-				req_app_model.getElements().add(sm_goal);
-				req_app_model.getElements().add(app_sg1);
-				req_app_model.getElements().add(app_sg2);
-				// graphical processing
-				String id = "";
-				String temp_id = "";
-				id = AppleScript.drawArbitraryRequirementElement(InfoEnum.REQ_TARGET_CANVAS, sm.getLayer(), "Hexagon", InfoEnum.NORMAL_SIZE, "{600, 100}", "0",
-						"(S)\n" + sm.getName());
-				sm.setId(id);
-				temp_id = AppleScript.drawRequirementElement(sm_goal, sm, "down");
-				sm_goal.setId(temp_id);
-				temp_id = AppleScript.drawRequirementElement(app_sg1, sm, "down");
-				app_sg1.setId(temp_id);
-				temp_id = AppleScript.drawRequirementElement(app_sg2, sm, "down");
-				app_sg2.setId(temp_id);
-				temp_id = AppleScript.drawRequirementLink(support_sm1, InfoEnum.SINGLE_LAYER);
-				support_sm1.setId(temp_id);
-				//				temp_id = AppleScript.drawRequirementLink(support_sm2);
-				//				support_sm2.setId(temp_id);
-				//				temp_id = AppleScript.drawRequirementLink(support_sm3);
-				//				support_sm3.setId(temp_id);
-			}
-		}
-	}
-	
 	/*
 	 * Related methods
 	 */
@@ -1392,11 +1265,11 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return encoding.decode(ByteBuffer.wrap(encoded)).toString();
 	}
-
-
 	
+	static void writeFile(String path, String graph) throws IOException {
+		PrintWriter writer = new PrintWriter(path, "UTF-8");
+		writer.println(graph);
+		writer.close();
+	}
 	
-
-	
-
 }

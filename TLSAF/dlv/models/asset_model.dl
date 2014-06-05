@@ -35,7 +35,14 @@ part_of(measurement_component,smart_meter_application).
 part_of(data_processing_component,smart_meter_application).
 part_of(encryption_component,smart_meter_application).
 
-% hardware asset
 
+% hardware asset
+hardware(energy_supplier_server).
+hardware(smart_meter_device).
+hardware(personal_computer).
+hardware(smart_appliance).
+hardware(home_area_network).
+hardware(home_gateway).
+hardware(data_communication_network).
 
 
