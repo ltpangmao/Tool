@@ -12,6 +12,7 @@ import it.unitn.tlsaf.ds.SecurityGoal;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -567,7 +568,7 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 
 		graph += "}";
 
-		writeFile("graphviz/sec_goal_"+visualization+".gv", graph);
+		writeFile("graphviz/sec_goal_"+visualization+".gv", graph, false);
 
 		//draw pdf figure for the corresponding graph
 		Runtime rt;
@@ -624,7 +625,7 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 
 		graph += "}";
 
-		writeFile("graphviz/sec_goal.gv", graph);
+		writeFile("graphviz/sec_goal.gv", graph, false);
 
 		//draw pdf figure for the corresponding graph
 		Runtime rt;
@@ -851,6 +852,7 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 	public static void securityGoalOperationalization(RequirementGraph req_model, int scope) throws IOException, ScriptException {
 
 		String expression_file = req_model.generateFormalExpressionToFile(scope);
+		//only consider security mechanisms that are specific for the current layer
 		String security_model_file = "dlv/models/security_model_"+req_model.getLayer().toLowerCase()+".dl ";
 
 		String refine_rule = "dlv/dlv -silent -nofacts dlv/rules/operationalization.rule "
@@ -874,10 +876,10 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 					s = s.replaceAll("make\\(", "");
 					s = s.replaceAll("\\)", "");
 					String[] sg = s.split(",");
-					//only consider security mechanisms that are specific for the current layer
-					if (!InfoEnum.security_mechanisms.get(sg[0]).equals(req_model.getLayer())) {
-						continue;
-					}
+					
+//					if (!InfoEnum.security_mechanisms.get(sg[0]).equals(req_model.getLayer())) {
+//						continue;
+//					}
 					// create new element
 					SecurityGoal makedGoal = (SecurityGoal) req_model.findElementByFormalName(sg[1]);
 					sg[0] = sg[0].replaceAll("\\_", " ");
@@ -1024,6 +1026,47 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 			getCombination(sg_set, all, one, current + 1);
 			one.removeLast();
 		}
+	}
+	
+	public static LinkedList<String> checkSecurityPatternContext(RequirementGraph req_model, Integer scope, boolean primary) throws IOException {
+		String expression_file = req_model.generateFormalExpressionToFile(scope);
+		//only consider security mechanisms that are specific for the current layer
+		String context_file = "dlv/context/domain_context.dl dlv/context/pattern_context.rule";
+
+		String context_check_rule = "dlv/dlv -silent -nofacts "+ expression_file+" "+context_file;
+
+		Runtime rt = Runtime.getRuntime();
+		Process pr = rt.exec(context_check_rule);
+
+		BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+		String line = null;
+
+		LinkedList<String> results_primary = new LinkedList<String>();
+		LinkedList<String> results_secondary = new LinkedList<String>();
+		while ((line = input.readLine()) != null) {
+			line = line.substring(1, line.length() - 1);
+			String[] result = line.split(", ");
+			for (String s : result) {
+				if (s.indexOf("c1") > 0) {// make sure it is the primary context
+					if (s.startsWith("hold")||s.startsWith("not_hold")||s.startsWith("undecidable")||s.startsWith("question")) {
+						results_primary.add(s);
+					} 
+				}
+				else {
+					if (s.startsWith("hold")||s.startsWith("not_hold")||s.startsWith("undecidable")||s.startsWith("question")) {
+						results_secondary.add(s);
+					}
+				}
+			}
+		}
+		
+		if(primary){
+			return results_primary;
+		}
+		else{
+			return results_secondary;
+		}
+		
 	}
 
 	public static void securityBusToAppTransformation(RequirementGraph req_bus_model, RequirementGraph req_app_model, int scope)
@@ -1266,10 +1309,13 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 		return encoding.decode(ByteBuffer.wrap(encoded)).toString();
 	}
 	
-	static void writeFile(String path, String graph) throws IOException {
-		PrintWriter writer = new PrintWriter(path, "UTF-8");
-		writer.println(graph);
+	static void writeFile(String path, String content, boolean append) throws IOException {
+		PrintWriter writer = new PrintWriter(new FileWriter(path, append));
+		writer.println(content);
 		writer.close();
 	}
+
+
+	
 	
 }

@@ -37,4 +37,10 @@ s_make(replicated_system, application_availability).
 s_make(load_balancer, application_availability).
 
 
+%new contextual pattern related stuff
+%s_help(audit, application_security).
+s_help(audit, application_integrity).
+s_help(audit, data_integrity).
+s_make(ids, application_integrity).
+
 

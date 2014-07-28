@@ -1,0 +1,48 @@
+%%%%%%%%%%%%%%%%%%%
+% IDS pattern rules
+%%%%%%%%%%%%%%%%%%%
+% checking primary context: c1
+% R1: hold rule  
+hold(ids, c1) :- communicate(system_node, internet), sec_mechanism(ids). 
+% R2: not_hold rule
+not_hold(ids, c1) :- dis_communicate(system_node, internet), sec_mechanism(ids). 
+% R3: not_sure rule
+undecidable(ids, c1) :- not hold(ids, c1), not not_hold(ids, c1), sec_mechanism(ids).
+% c1q1: are there nodes communicating with each other using the Internet?
+question(ids_c1q1) :- undecidable(ids, c1). 
+
+
+% checking secondary context: c2
+% R1: hold rule  
+hold(ids, c2) :- harmful(request_from_non_suspicious_address), sec_mechanism(ids). 
+% R2: not_hold rule
+not_hold(ids, c2) :- non_harmful(request_from_non_suspicious_address), sec_mechanism(ids). 
+% R3: not_sure rule
+undecidable(ids, c2) :- not hold(ids, c2), not not_hold(ids, c2), sec_mechanism(ids).
+% c2q1: are requests coming from a non-suspicious address harmful?
+question(ids_c2q1) :- undecidable(ids, c2). 
+
+
+% checking secondary context: c3
+% R1: hold rule  
+hold(ids, c3) :- sufficient(attack_information), sec_mechanism(ids). 
+% R2: not_hold rule
+not_hold(ids, c3) :- not_sufficient(attack_information), sec_mechanism(ids). 
+% R3: not_sure rule
+undecidable(ids, c3) :- not hold(ids, c3), not not_hold(ids, c3), sec_mechanism(ids).
+% c3q1: is there sufficient and appropriate information?
+question(ids_c3q1) :- undecidable(ids, c3). 
+
+
+%%%%%%%%%%%%%%%%%%%
+% Audit pattern rules
+%%%%%%%%%%%%%%%%%%%
+% checking primary context: c1
+% R1: hold rule  
+hold(audit, c1) :- handle(system, sensitive_data), sec_mechanism(audit). 
+% R2: not_hold rule
+not_hold(audit, c1) :- not_handle(system, sensitive_data), sec_mechanism(audit).
+% R3: not_sure rule
+undecidable(audit, c1) :- not hold(audit, c1), not not_hold(audit, c1), sec_mechanism(audit).
+% c1q1: does the system handle sensitive data?
+question(audit_c1q1) :- undecidable(audit, c1).

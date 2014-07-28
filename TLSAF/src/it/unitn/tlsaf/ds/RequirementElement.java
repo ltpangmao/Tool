@@ -170,7 +170,7 @@ public class RequirementElement implements Element{
 				break;
 			case SECURITY_MECHANISM:
 				// remove "(S)"
-				expression = "sec_mechenism("+this.getFormalName()+").";
+				expression = "sec_mechanism("+this.getFormalName()+").";
 				break;
 			default:
 				expression = "";

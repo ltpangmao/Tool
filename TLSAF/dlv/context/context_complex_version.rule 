@@ -1,0 +1,23 @@
+%%%%%%%%%%%%%%%%%%%
+% IDS pattern rules
+%%%%%%%%%%%%%%%%%%%
+% checking primary context: c1
+% R0: premise 
+may_hold(audit, c1) :- node(N1), node(N2), N1<>N2, sec_mechanism(audit). 
+% R1: hold rule  
+hold(audit, c1) :- node(N1), node(N2), N1<>N2, communicate(N1, N2, internet), sec_mechanism(audit).
+% R2: not_hold rule
+not_hold(audit, c1) :- node(N1), node(N2), N1<>N2, dis_communicate(N1, N2, internet), sec_mechanism(audit). 
+not_hold(audit, c1) :- not may_hold(audit, c1). 
+% R3: not_sure rule
+undecidable(audit, c1) :- may_hold(audit, c1), not hold(audit, c1), not not_hold(audit, c1), sec_mechanism(audit).
+% c1q1: are there nodes communicating with each other using the Internet?
+question(audit_c1q1) :- undecidable(audit, c1). 
+
+
+% checking secondary context: c2, c3
+
+
+%%%%%%%%%%%%%%%%%%%
+% Audit pattern rules
+%%%%%%%%%%%%%%%%%%%

@@ -39,7 +39,9 @@ public class TryOut {
 //			System.out.println(l);
 //		}
 		
-		testDLV();
+//		testDLV();
+		
+		Inference.writeFile("dlv/teset.txt", "teste\n", false);
 		
 	}
 

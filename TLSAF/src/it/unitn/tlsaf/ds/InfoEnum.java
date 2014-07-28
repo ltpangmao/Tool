@@ -69,6 +69,8 @@ public class InfoEnum {
 		reverse_req_elem_type_map.put(InfoEnum.RequirementElementType.DOMAIN_ASSUMPTION.name(), "Rectangle");
 	}
 
+	
+	
 	// determine layer of each security mechanism, especially the one that is related to 
 	public static final Map<String, String> security_mechanisms = new HashMap<String, String>();
 	static {
@@ -96,6 +98,29 @@ public class InfoEnum {
 		security_mechanisms.put("ups", InfoEnum.Layer.PHYSICAL.name());
 
 	}
+	
+	// record questions for checking undecidable context
+	public static final Map<String, String> pattern_context_question = new HashMap<String, String>();
+	static {
+		// ids-c1
+		pattern_context_question.put("question(ids_c1q1)", "are there nodes communicating with each other using the Internet?");
+		pattern_context_question.put("question(ids_c1q1)y", "communicate(system_node, internet).");
+		pattern_context_question.put("question(ids_c1q1)n", "dis_communicate(system_node, internet).");
+		// ids-c2
+		pattern_context_question.put("question(ids_c2q1)", "are requests coming from a non-suspicious address harmful?");
+		pattern_context_question.put("question(ids_c2q1)y", "harmful(request_from_non_suspicious_address).");
+		pattern_context_question.put("question(ids_c2q1)n", "non_harmful(request_from_non_suspicious_address).");
+		// ids-c3
+		pattern_context_question.put("question(ids_c3q1)", "is there sufficient and appropriate information?");
+		pattern_context_question.put("question(ids_c3q1)y", "sufficient(attack_information).");
+		pattern_context_question.put("question(ids_c3q1)n", "not_sufficient(attack_information).");
+		// audit-c1
+		pattern_context_question.put("question(audit_c1q1)", "does the system handle sensitive data?");
+		pattern_context_question.put("question(audit_c1q1)y", "handle(system, sensitive_data).");
+		pattern_context_question.put("question(audit_c1q1)n", "not_handle(system, sensitive_data).");
+	
+	}
+	
 
 	// Types of elements and links
 	public enum ModelCategory {

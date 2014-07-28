@@ -1,0 +1,13 @@
+
+%communicate(computer1, computer2, internet).
+%dis_communicate(computer1, computer2, internet).
+%sec_mechanism(audit).
+
+
+
+handle(system, sensitive_data).
+
+communicate(system_node, internet).
+non_harmful(request_from_non_suspicious_address).
+
+sufficient(attack_information).

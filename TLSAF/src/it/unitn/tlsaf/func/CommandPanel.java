@@ -34,16 +34,16 @@ import org.eclipse.swt.widgets.Label;
 public class CommandPanel extends ApplicationWindow {
 	// static logger that is used over the whole project
 	public static Logger logger;
-	static public void setup(){
+
+	static public void setup() {
 		// Get the global logger to configure it
-	    logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-	    logger.setLevel(Level.SEVERE);
-//	    logger.setLevel(Level.WARNING);
-//	    logger.setLevel(Level.INFO);
-	    
+		logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+		logger.setLevel(Level.SEVERE);
+		// logger.setLevel(Level.WARNING);
+		// logger.setLevel(Level.INFO);
+
 	}
-	
-	
+
 	private ModelSet ms;
 
 	/**
@@ -57,7 +57,6 @@ public class CommandPanel extends ApplicationWindow {
 		addStatusLine();
 		ms = new ModelSet();
 	}
-	
 
 	public ModelSet getMs() {
 		return ms;
@@ -67,53 +66,52 @@ public class CommandPanel extends ApplicationWindow {
 		this.ms = ms;
 	}
 
-
-
 	/**
 	 * Create contents of the application window.
+	 * 
 	 * @param parent
 	 */
 	@Override
 	protected Control createContents(Composite parent) {
 		final Composite container = new Composite(parent, SWT.NONE);
-		
-		//Layer setting
+
+		// Layer setting
 		final Group grpLayer = new Group(container, SWT.NONE);
 		grpLayer.setText("Layer");
 		grpLayer.setBounds(32, 163, 196, 88);
-		
+
 		Button btnBusiness = new Button(grpLayer, SWT.RADIO);
 		btnBusiness.setBounds(10, 33, 69, 18);
 		btnBusiness.setText("Business");
 		btnBusiness.setSelection(true);
-		
+
 		Button btnApplication = new Button(grpLayer, SWT.RADIO);
 		btnApplication.setBounds(96, 10, 91, 18);
 		btnApplication.setText("Application");
-		
+
 		Button btnPhysical = new Button(grpLayer, SWT.RADIO);
 		btnPhysical.setBounds(96, 33, 82, 18);
 		btnPhysical.setText("Physical");
-		
+
 		Button btnAllLayer = new Button(grpLayer, SWT.RADIO);
 		btnAllLayer.setBounds(10, 10, 91, 18);
 		btnAllLayer.setText("All layers");
-//		btnAllLayer.setSelection(true);
-		
+		// btnAllLayer.setSelection(true);
+
 		final Group grpObjects = new Group(container, SWT.NONE);
 		grpObjects.setText("Object");
 		grpObjects.setBounds(234, 163, 140, 88);
-		
+
 		Button btnSelectedElements_1 = new Button(grpObjects, SWT.RADIO);
 		btnSelectedElements_1.setBounds(10, 34, 109, 18);
 		btnSelectedElements_1.setText("Selected models");
-		
+
 		Button btnAllModel = new Button(grpObjects, SWT.RADIO);
 		btnAllModel.setBounds(10, 10, 86, 18);
 		btnAllModel.setText("All models");
 		btnAllModel.setSelection(true);
-		
-		//Auxiliary functions
+
+		// Auxiliary functions
 		Button btnDeleteAll = new Button(container, SWT.NONE);
 		btnDeleteAll.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -124,7 +122,7 @@ public class CommandPanel extends ApplicationWindow {
 				MessageDialog.openInformation(container.getShell(), "Message", "Delete all models!");
 			}
 		});
-		btnDeleteAll.setBounds(380, 74, 94, 42);
+		btnDeleteAll.setBounds(496, 50, 94, 42);
 		btnDeleteAll.setText("Delete all");
 
 		Button btnPrintModel = new Button(container, SWT.NONE);
@@ -132,86 +130,78 @@ public class CommandPanel extends ApplicationWindow {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String layer_choice = getCommand(grpLayer);
-				if(layer_choice.equals(InfoEnum.Layer.ALL.name())){
+				if (layer_choice.equals(InfoEnum.Layer.ALL.name())) {
 					ms.req_bus_model.printModel();
 					ms.req_app_model.printModel();
 					ms.req_phy_model.printModel();
-				}
-				else if(layer_choice.equals(InfoEnum.Layer.BUSINESS.name())){
+				} else if (layer_choice.equals(InfoEnum.Layer.BUSINESS.name())) {
 					ms.req_bus_model.printModel();
-				}
-				else if(layer_choice.equals(InfoEnum.Layer.APPLICATION.name())){
+				} else if (layer_choice.equals(InfoEnum.Layer.APPLICATION.name())) {
 					ms.req_app_model.printModel();
-				}
-				else if(layer_choice.equals(InfoEnum.Layer.PHYSICAL.name())){
+				} else if (layer_choice.equals(InfoEnum.Layer.PHYSICAL.name())) {
 					ms.req_phy_model.printModel();
-				}
-				else {
+				} else {
 					CommandPanel.logger.severe("Layer selection error!");
 				}
 			}
 		});
-		btnPrintModel.setBounds(380, 122, 94, 42);
+		btnPrintModel.setBounds(496, 98, 94, 42);
 		btnPrintModel.setText("Print model");
-		
-		//import function
+
+		// import function
 		final Group grpImport = new Group(container, SWT.NONE);
 		grpImport.setText("Import Source");
 		grpImport.setBounds(32, 50, 151, 88);
-		
+
 		Button btnSelectedElements = new Button(grpImport, SWT.RADIO);
 		btnSelectedElements.setBounds(10, 10, 132, 18);
 		btnSelectedElements.setText("Selected elements");
 		btnSelectedElements.setSelection(true);
-		
+
 		Button btnFromFiles = new Button(grpImport, SWT.RADIO);
 		btnFromFiles.setBounds(10, 33, 91, 18);
 		btnFromFiles.setText("From files");
-		
+
 		final Group grpModel = new Group(container, SWT.NONE);
 		grpModel.setText("Model Type");
 		grpModel.setBounds(189, 50, 168, 86);
-		
+
 		Button btnRequirementModel = new Button(grpModel, SWT.RADIO);
 		btnRequirementModel.setBounds(10, 10, 134, 18);
 		btnRequirementModel.setText("Requirement model");
 		btnRequirementModel.setSelection(true);
-		
+
 		Button btnTrustModel = new Button(grpModel, SWT.RADIO);
 		btnTrustModel.setBounds(10, 33, 91, 18);
 		btnTrustModel.setText("Trust model");
-		
+
 		final Button btnImport = new Button(container, SWT.NONE);
 		btnImport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//for import, we don't distinguish layers,
-				//String layer = getLayer(grpLayer);
+				// for import, we don't distinguish layers,
+				// String layer = getLayer(grpLayer);
 				String model = getCommand(grpModel);
 				String command = getCommand(grpImport);
-				Boolean canvas=null;
-				if (command.equals(InfoEnum.Commands.IMP_SELECTION.name())){
+				Boolean canvas = null;
+				if (command.equals(InfoEnum.Commands.IMP_SELECTION.name())) {
 					canvas = true;
-				}
-				else if (command.equals(InfoEnum.Commands.IMP_FILE.name())){
+				} else if (command.equals(InfoEnum.Commands.IMP_FILE.name())) {
 					canvas = false;
-				}
-				else {
+				} else {
 					logger.warning("Import command error!");
 				}
-				
+
 				try {
 					if (model.equals(InfoEnum.ModelCategory.REQUIREMENT.name())) {
 						Inference.importReqModel(ms, canvas);
-						//TODO: customize the size of the dialog
-						MessageDialog.openInformation(container.getShell(), "Message",
-								"Finish importing requirement models!");
-					}else if(model.equals(InfoEnum.ModelCategory.ACTOR.name())){
+						// TODO: customize the size of the dialog
+						MessageDialog.openInformation(container.getShell(), "Message", "Finish importing requirement models!");
+					} else if (model.equals(InfoEnum.ModelCategory.ACTOR.name())) {
 						Inference.importActorModel(ms.actor_model, canvas);
-						//TODO: customize the size of the dialog
+						// TODO: customize the size of the dialog
 						MessageDialog.openInformation(container.getShell(), "Message", "Finish importing trust models!");
-					}
-					else {
+					} else {
 						logger.warning("Command error!");
 					}
 				} catch (IOException e1) {
@@ -221,41 +211,41 @@ public class CommandPanel extends ApplicationWindow {
 				}
 			}
 		});
-		
-		btnImport.setBounds(380, 26, 94, 42);
+
+		btnImport.setBounds(384, 50, 94, 42);
 		btnImport.setText("Import");
-		
-		//Refinement function
+
+		// Refinement function
 		final Group grpRefinementMode = new Group(container, SWT.NONE);
 		grpRefinementMode.setText("Refinement Mode");
 		grpRefinementMode.setBounds(13, 305, 118, 86);
-		
+
 		Button btnOnestep = new Button(grpRefinementMode, SWT.RADIO);
 		btnOnestep.setBounds(10, 10, 91, 18);
 		btnOnestep.setText("One-step");
 		btnOnestep.setSelection(true);
-		
+
 		Button btnExhaustive = new Button(grpRefinementMode, SWT.RADIO);
 		btnExhaustive.setBounds(10, 34, 91, 18);
 		btnExhaustive.setText("Exhaustive");
-		
+
 		final Group grpRefinementDimension = new Group(container, SWT.NONE);
 		grpRefinementDimension.setText("Refinement Dimension");
 		grpRefinementDimension.setBounds(13, 397, 140, 98);
-		
+
 		Button btnAttribute = new Button(grpRefinementDimension, SWT.RADIO);
 		btnAttribute.setBounds(10, 10, 91, 18);
 		btnAttribute.setText("Attribute");
 		btnAttribute.setSelection(true);
-		
+
 		Button btnAsset = new Button(grpRefinementDimension, SWT.RADIO);
 		btnAsset.setBounds(10, 34, 91, 18);
 		btnAsset.setText("Asset");
-		
+
 		Button btnInterval = new Button(grpRefinementDimension, SWT.RADIO);
 		btnInterval.setBounds(10, 58, 91, 18);
 		btnInterval.setText("Interval");
-		
+
 		final Group grpVisualization = new Group(container, SWT.NONE);
 		grpVisualization.setBounds(13, 501, 131, 98);
 		grpVisualization.setText("Visualization");
@@ -269,8 +259,7 @@ public class CommandPanel extends ApplicationWindow {
 		Button btnGraphviz = new Button(grpVisualization, SWT.RADIO);
 		btnGraphviz.setBounds(10, 34, 91, 18);
 		btnGraphviz.setText("Graphviz");
-		
-		
+
 		Button btnRefine = new Button(container, SWT.NONE);
 		btnRefine.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -279,49 +268,47 @@ public class CommandPanel extends ApplicationWindow {
 				String mode_choice = getCommand(grpRefinementMode);
 				String visualization = getCommand(grpVisualization);
 				String object_choice = getCommand(grpObjects);
-				//TODO: this dimension choice is defined as a standard command, we simply use its lower-case content here
+				// TODO: this dimension choice is defined as a standard command,
+				// we simply use its lower-case content here
 				String dimension_choice = getCommand(grpRefinementDimension);
 				try {
 					if (mode_choice.equals(InfoEnum.Commands.REF_ALL_ONE_STEP.name())) {
-						if(layer_choice.equals(InfoEnum.Layer.ALL.name())){
+						if (layer_choice.equals(InfoEnum.Layer.ALL.name())) {
 							Inference.securityGoalRefine(ms.req_bus_model, dimension_choice, Integer.valueOf(object_choice));
 							Inference.securityGoalRefine(ms.req_app_model, dimension_choice, Integer.valueOf(object_choice));
 							Inference.securityGoalRefine(ms.req_phy_model, dimension_choice, Integer.valueOf(object_choice));
-						}
-						else if(layer_choice.equals(InfoEnum.Layer.BUSINESS.name())){
+						} else if (layer_choice.equals(InfoEnum.Layer.BUSINESS.name())) {
 							Inference.securityGoalRefine(ms.req_bus_model, dimension_choice, Integer.valueOf(object_choice));
-						}
-						else if(layer_choice.equals(InfoEnum.Layer.APPLICATION.name())){
+						} else if (layer_choice.equals(InfoEnum.Layer.APPLICATION.name())) {
 							Inference.securityGoalRefine(ms.req_app_model, dimension_choice, Integer.valueOf(object_choice));
-						}
-						else if(layer_choice.equals(InfoEnum.Layer.PHYSICAL.name())){
+						} else if (layer_choice.equals(InfoEnum.Layer.PHYSICAL.name())) {
 							Inference.securityGoalRefine(ms.req_phy_model, dimension_choice, Integer.valueOf(object_choice));
-						}
-						else {
+						} else {
 							CommandPanel.logger.severe("Layer selection error!");
 						}
-						//TODO: customize the size of the dialog
+						// TODO: customize the size of the dialog
 						MessageDialog.openInformation(container.getShell(), "Message", "Finish one-step refinement!");
-					}
-					else if(mode_choice.equals(InfoEnum.Commands.REF_ALL_EXHAUSTIVE.name())){
-						if(layer_choice.equals(InfoEnum.Layer.ALL.name())){
-							Inference.exhaustiveSecurityGoalRefineAnalysis(ms.req_bus_model, ms.actor_model, Integer.valueOf(visualization), Integer.valueOf(object_choice));
-							Inference.exhaustiveSecurityGoalRefineAnalysis(ms.req_app_model, ms.actor_model, Integer.valueOf(visualization), Integer.valueOf(object_choice));
-							Inference.exhaustiveSecurityGoalRefineAnalysis(ms.req_phy_model, ms.actor_model, Integer.valueOf(visualization), Integer.valueOf(object_choice));
-						}
-						else if(layer_choice.equals(InfoEnum.Layer.BUSINESS.name())){
-							Inference.exhaustiveSecurityGoalRefineAnalysis(ms.req_bus_model, ms.actor_model, Integer.valueOf(visualization), Integer.valueOf(object_choice));
-						}
-						else if(layer_choice.equals(InfoEnum.Layer.APPLICATION.name())){
-							Inference.exhaustiveSecurityGoalRefineAnalysis(ms.req_app_model, ms.actor_model, Integer.valueOf(visualization), Integer.valueOf(object_choice));
-						}
-						else if(layer_choice.equals(InfoEnum.Layer.PHYSICAL.name())){
-							Inference.exhaustiveSecurityGoalRefineAnalysis(ms.req_phy_model, ms.actor_model, Integer.valueOf(visualization), Integer.valueOf(object_choice));
-						}
-						else {
+					} else if (mode_choice.equals(InfoEnum.Commands.REF_ALL_EXHAUSTIVE.name())) {
+						if (layer_choice.equals(InfoEnum.Layer.ALL.name())) {
+							Inference.exhaustiveSecurityGoalRefineAnalysis(ms.req_bus_model, ms.actor_model,
+									Integer.valueOf(visualization), Integer.valueOf(object_choice));
+							Inference.exhaustiveSecurityGoalRefineAnalysis(ms.req_app_model, ms.actor_model,
+									Integer.valueOf(visualization), Integer.valueOf(object_choice));
+							Inference.exhaustiveSecurityGoalRefineAnalysis(ms.req_phy_model, ms.actor_model,
+									Integer.valueOf(visualization), Integer.valueOf(object_choice));
+						} else if (layer_choice.equals(InfoEnum.Layer.BUSINESS.name())) {
+							Inference.exhaustiveSecurityGoalRefineAnalysis(ms.req_bus_model, ms.actor_model,
+									Integer.valueOf(visualization), Integer.valueOf(object_choice));
+						} else if (layer_choice.equals(InfoEnum.Layer.APPLICATION.name())) {
+							Inference.exhaustiveSecurityGoalRefineAnalysis(ms.req_app_model, ms.actor_model,
+									Integer.valueOf(visualization), Integer.valueOf(object_choice));
+						} else if (layer_choice.equals(InfoEnum.Layer.PHYSICAL.name())) {
+							Inference.exhaustiveSecurityGoalRefineAnalysis(ms.req_phy_model, ms.actor_model,
+									Integer.valueOf(visualization), Integer.valueOf(object_choice));
+						} else {
 							CommandPanel.logger.severe("Layer selection error!");
 						}
-						//TODO: customize the size of the dialog
+						// TODO: customize the size of the dialog
 						MessageDialog.openInformation(container.getShell(), "Message", "Finish exhaustive refinement!");
 					}
 				} catch (IOException e1) {
@@ -333,8 +320,8 @@ public class CommandPanel extends ApplicationWindow {
 		});
 		btnRefine.setBounds(29, 257, 94, 42);
 		btnRefine.setText("Step1:\nRefine");
-		
-		//simplification
+
+		// simplification
 		Button btnSimplify = new Button(container, SWT.NONE);
 		btnSimplify.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -355,7 +342,7 @@ public class CommandPanel extends ApplicationWindow {
 					} else {
 						CommandPanel.logger.severe("Layer selection error!");
 					}
-					//TODO: customize the size of the dialog
+					// TODO: customize the size of the dialog
 					MessageDialog.openInformation(container.getShell(), "Message", "Identify critical security goals!");
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -366,18 +353,18 @@ public class CommandPanel extends ApplicationWindow {
 		});
 		btnSimplify.setBounds(131, 257, 94, 42);
 		btnSimplify.setText("Step2:\nSimplify");
-		
+
 		final List alternative_list = new List(container, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		alternative_list.setBounds(159, 305, 311, 300);
-		 ScrollBar sb = alternative_list.getVerticalBar();
-		
+		alternative_list.setBounds(159, 360, 445, 239);
+		ScrollBar sb = alternative_list.getVerticalBar();
+
 		Button btnOperationalize = new Button(container, SWT.NONE);
 		btnOperationalize.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String layer_choice = getCommand(grpLayer);
 				String object_choice = getCommand(grpObjects);
-				// merge the alternative calculation method into the  
+				// merge the alternative calculation method into the
 				LinkedList<String> alternatives = null;
 				try {
 					if (layer_choice.equals(InfoEnum.Layer.ALL.name())) {
@@ -386,26 +373,23 @@ public class CommandPanel extends ApplicationWindow {
 						Inference.securityGoalOperationalization(ms.req_phy_model, Integer.valueOf(object_choice));
 					} else if (layer_choice.equals(InfoEnum.Layer.BUSINESS.name())) {
 						Inference.securityGoalOperationalization(ms.req_bus_model, Integer.valueOf(object_choice));
-						alternatives = Inference.securityAlternativeSolutions(ms.req_bus_model,
-								Integer.valueOf(object_choice));
+						alternatives = Inference.securityAlternativeSolutions(ms.req_bus_model, Integer.valueOf(object_choice));
 					} else if (layer_choice.equals(InfoEnum.Layer.APPLICATION.name())) {
 						Inference.securityGoalOperationalization(ms.req_app_model, Integer.valueOf(object_choice));
-						alternatives = Inference.securityAlternativeSolutions(ms.req_app_model,
-								Integer.valueOf(object_choice));
+						alternatives = Inference.securityAlternativeSolutions(ms.req_app_model, Integer.valueOf(object_choice));
 					} else if (layer_choice.equals(InfoEnum.Layer.PHYSICAL.name())) {
 						Inference.securityGoalOperationalization(ms.req_phy_model, Integer.valueOf(object_choice));
-						alternatives = Inference.securityAlternativeSolutions(ms.req_phy_model,
-								Integer.valueOf(object_choice));
+						alternatives = Inference.securityAlternativeSolutions(ms.req_phy_model, Integer.valueOf(object_choice));
 					} else {
 						CommandPanel.logger.severe("Layer selection error!");
 					}
-					
+
 					alternative_list.removeAll();
-					for (String s: alternatives){
+					for (String s : alternatives) {
 						alternative_list.add(s);
 					}
-					
-					//TODO: customize the size of the dialog
+
+					// TODO: customize the size of the dialog
 					MessageDialog.openInformation(container.getShell(), "Message", "Finish Operationalization of critical security goals!");
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -416,13 +400,10 @@ public class CommandPanel extends ApplicationWindow {
 		});
 		btnOperationalize.setBounds(231, 257, 108, 42);
 		btnOperationalize.setText("Step3:\nOperationalize");
-		
 
-		
-//		JScrollPane listScroller = new JScrollPane(alternative_list);
-//		listScroller.setPreferredSize(new Dimension(250, 80));
-		
-		
+		// JScrollPane listScroller = new JScrollPane(alternative_list);
+		// listScroller.setPreferredSize(new Dimension(250, 80));
+
 		Button btnCalculateAlternatives = new Button(container, SWT.NONE);
 		btnCalculateAlternatives.setVisible(false);
 		btnCalculateAlternatives.addSelectionListener(new SelectionAdapter() {
@@ -432,32 +413,29 @@ public class CommandPanel extends ApplicationWindow {
 				String object_choice = getCommand(grpObjects);
 				LinkedList<String> alternatives = null;
 				if (layer_choice.equals(InfoEnum.Layer.ALL.name())) {
-					//TODO: we currently analyze and show alternatives only within one layer.
+					// TODO: we currently analyze and show alternatives only
+					// within one layer.
 				} else if (layer_choice.equals(InfoEnum.Layer.BUSINESS.name())) {
-					alternatives = Inference.securityAlternativeSolutions(ms.req_bus_model,
-							Integer.valueOf(object_choice));
+					alternatives = Inference.securityAlternativeSolutions(ms.req_bus_model, Integer.valueOf(object_choice));
 				} else if (layer_choice.equals(InfoEnum.Layer.APPLICATION.name())) {
-					alternatives = Inference.securityAlternativeSolutions(ms.req_app_model,
-							Integer.valueOf(object_choice));
+					alternatives = Inference.securityAlternativeSolutions(ms.req_app_model, Integer.valueOf(object_choice));
 				} else if (layer_choice.equals(InfoEnum.Layer.PHYSICAL.name())) {
-					alternatives = Inference.securityAlternativeSolutions(ms.req_phy_model,
-							Integer.valueOf(object_choice));
+					alternatives = Inference.securityAlternativeSolutions(ms.req_phy_model, Integer.valueOf(object_choice));
 				} else {
 					CommandPanel.logger.severe("Layer selection error!");
 				}
-				
-				for (String s: alternatives){
+
+				for (String s : alternatives) {
 					alternative_list.add(s);
 				}
-				
-				//TODO: customize the size of the dialog
+
+				// TODO: customize the size of the dialog
 				MessageDialog.openInformation(container.getShell(), "Message", "Identify alternative security solutions!");
 			}
 		});
 		btnCalculateAlternatives.setBounds(592, 112, 94, 42);
 		btnCalculateAlternatives.setText("Step\nAlternative\n Solutions");
-		
-		
+
 		Button btnTransferSecurityConcerns = new Button(container, SWT.NONE);
 		btnTransferSecurityConcerns.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -467,16 +445,12 @@ public class CommandPanel extends ApplicationWindow {
 				LinkedList<String> alternatives = null;
 				try {
 					if (layer_choice.equals(InfoEnum.Layer.ALL.name())) {
-						Inference.securityBusToAppTransformation(ms.req_bus_model, ms.req_app_model,
-								Integer.valueOf(object_choice));
-						Inference.securityAppToPhyTransformation(ms.req_app_model, ms.req_phy_model,
-								Integer.valueOf(object_choice));
+						Inference.securityBusToAppTransformation(ms.req_bus_model, ms.req_app_model, Integer.valueOf(object_choice));
+						Inference.securityAppToPhyTransformation(ms.req_app_model, ms.req_phy_model, Integer.valueOf(object_choice));
 					} else if (layer_choice.equals(InfoEnum.Layer.BUSINESS.name())) {
-						Inference.securityBusToAppTransformation(ms.req_bus_model, ms.req_app_model,
-								Integer.valueOf(object_choice));
+						Inference.securityBusToAppTransformation(ms.req_bus_model, ms.req_app_model, Integer.valueOf(object_choice));
 					} else if (layer_choice.equals(InfoEnum.Layer.APPLICATION.name())) {
-						Inference.securityAppToPhyTransformation(ms.req_app_model, ms.req_phy_model,
-								Integer.valueOf(object_choice));
+						Inference.securityAppToPhyTransformation(ms.req_app_model, ms.req_phy_model, Integer.valueOf(object_choice));
 					} else if (layer_choice.equals(InfoEnum.Layer.PHYSICAL.name())) {
 					} else {
 						CommandPanel.logger.severe("Layer selection error!");
@@ -488,30 +462,184 @@ public class CommandPanel extends ApplicationWindow {
 				MessageDialog.openInformation(container.getShell(), "Message", "Transfer security concerns to the application layer!");
 			}
 		});
-		btnTransferSecurityConcerns.setBounds(345, 257, 118, 42);
-		btnTransferSecurityConcerns.setText("Step 4: Transfer \nsecurity concerns");
-		
+		btnTransferSecurityConcerns.setBounds(486, 257, 118, 42);
+		btnTransferSecurityConcerns.setText("Step 5: Transfer \nsecurity concerns");
+
 		Label lblCommonOperationParameters = new Label(container, SWT.NONE);
 		lblCommonOperationParameters.setBounds(32, 150, 183, 14);
 		lblCommonOperationParameters.setText("Common operation parameters");
-		
+
 		Label lblOperationSeparator = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
 		lblOperationSeparator.setText("operation separator");
 		lblOperationSeparator.setBounds(32, 144, 168, 10);
-		
+
 		Label lblImportSeparator = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
 		lblImportSeparator.setText("import separator");
 		lblImportSeparator.setBounds(32, 18, 168, 14);
-		
+
 		Label lblImportParameters = new Label(container, SWT.NONE);
 		lblImportParameters.setBounds(32, 26, 121, 14);
 		lblImportParameters.setText("Import parameters");
+
+		Button btnCheckPrimaryContext = new Button(container, SWT.NONE);
+		btnCheckPrimaryContext.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String layer_choice = getCommand(grpLayer);
+				String object_choice = getCommand(grpObjects);
+				LinkedList<String> results = null;
+				try {
+					if (layer_choice.equals(InfoEnum.Layer.ALL.name())) {
+						// tackle each layer separately by default
+					} else if (layer_choice.equals(InfoEnum.Layer.BUSINESS.name())) {
+						results = Inference.checkSecurityPatternContext(ms.req_bus_model, Integer.valueOf(object_choice), true);
+					} else if (layer_choice.equals(InfoEnum.Layer.APPLICATION.name())) {
+						results = Inference.checkSecurityPatternContext(ms.req_app_model, Integer.valueOf(object_choice), true);
+					} else if (layer_choice.equals(InfoEnum.Layer.PHYSICAL.name())) {
+						results = Inference.checkSecurityPatternContext(ms.req_phy_model, Integer.valueOf(object_choice), true);
+					} else {
+						CommandPanel.logger.severe("Layer selection error!");
+					}
+				} catch (NumberFormatException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				// popup dialog shows the check results
+				String hold = "";
+				String not_hold = "";
+				String undecidable = "";
+				String temp = "";
+				for (String s : results) {
+					if (s.startsWith("hold")) {
+						// extract the name of the pattern
+						temp = s.substring(5, s.indexOf(","));
+						hold += temp + " pattern is applicable in current context.\n";
+					} else if (s.startsWith("not_hold")) {
+						// extract the name of the pattern
+						temp = s.substring(9, s.indexOf(","));
+						not_hold += temp + " pattern is not applicable in current context.\n";
+					} else if (s.startsWith("undecidable")) {
+						// extract the name of the pattern
+						temp = s.substring(12, s.indexOf(","));
+						undecidable += temp + " pattern is undecidable in current context.\n";
+					}
+				}
+				if (!hold.equals("")) {
+					MessageDialog.openInformation(container.getShell(), "Message", hold);
+				}
+				if (!not_hold.equals("")) {
+					MessageDialog.openInformation(container.getShell(), "Message", not_hold);
+				}
+				if (!undecidable.equals("")) {
+					MessageDialog.openInformation(container.getShell(), "Message", undecidable);
+				}
+				// popup dialog for asking manual check
+				for (String s : results) {
+					if (s.startsWith("question")) {
+						temp = s.substring(9, s.indexOf("_"));
+						boolean check_result = MessageDialog.openQuestion(container.getShell(), temp+ " pattern secondary context check",
+								InfoEnum.pattern_context_question.get(s));
+						try {
+							if (check_result == true) {
+								// add the context to "domain_context"
+								Inference.writeFile("dlv/context/domain_context.dl", "\n"+InfoEnum.pattern_context_question.get(s + "y"), true);
+							} else {
+								// add the negation of the context to "domain_context"
+								Inference.writeFile("dlv/context/domain_context.dl", InfoEnum.pattern_context_question.get(s + "n"), true);
+							}
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		btnCheckPrimaryContext.setBounds(356, 256, 118, 43);
+		btnCheckPrimaryContext.setText("Step 4.1: Check \nprimary context");
+
 		
-		
-		
-		
-		
-		
+		Button btnCheckSecondaryContext = new Button(container, SWT.NONE);
+		btnCheckSecondaryContext.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String layer_choice = getCommand(grpLayer);
+				String object_choice = getCommand(grpObjects);
+				LinkedList<String> results = null;
+				try {
+					if (layer_choice.equals(InfoEnum.Layer.ALL.name())) {
+						// tackle each layer separately by default
+					} else if (layer_choice.equals(InfoEnum.Layer.BUSINESS.name())) {
+						results = Inference.checkSecurityPatternContext(ms.req_bus_model, Integer.valueOf(object_choice), false);
+					} else if (layer_choice.equals(InfoEnum.Layer.APPLICATION.name())) {
+						results = Inference.checkSecurityPatternContext(ms.req_app_model, Integer.valueOf(object_choice), false);
+					} else if (layer_choice.equals(InfoEnum.Layer.PHYSICAL.name())) {
+						results = Inference.checkSecurityPatternContext(ms.req_phy_model, Integer.valueOf(object_choice), false);
+					} else {
+						CommandPanel.logger.severe("Layer selection error!");
+					}
+				} catch (NumberFormatException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				// popup dialog shows the check results
+				String hold = "";
+				String not_hold = "";
+				String undecidable = "";
+				String temp = "";
+				String temp_context = "";
+				for (String s : results) {
+					if (s.startsWith("hold")) {
+						// extract the name of the pattern and corresponding context
+						temp = s.substring(5, s.indexOf(","));
+						temp_context = s.substring(s.indexOf(",")+1, s.indexOf(")"));
+						hold += temp + " pattern: context "+temp_context +" holds in current context.\n";
+					} else if (s.startsWith("not_hold")) {
+						// extract the name of the pattern and corresponding context
+						temp = s.substring(9, s.indexOf(","));
+						temp_context = s.substring(s.indexOf(",")+1, s.indexOf(")"));
+						not_hold += temp + " pattern: context "+temp_context +" does not hold in current context.\n";
+					} else if (s.startsWith("undecidable")) {
+						// extract the name of the pattern
+						temp = s.substring(12, s.indexOf(","));
+						temp_context = s.substring(s.indexOf(",")+1, s.indexOf(")"));
+						undecidable += temp + " pattern: context "+temp_context +" cannot be decided in current context.\n";
+					}
+				}
+				if (!hold.equals("")) {
+					MessageDialog.openInformation(container.getShell(), "Message", hold);
+				}
+				if (!not_hold.equals("")) {
+					MessageDialog.openInformation(container.getShell(), "Message", not_hold);
+				}
+				if (!undecidable.equals("")) {
+					MessageDialog.openInformation(container.getShell(), "Message", undecidable);
+				}
+				// popup dialog for asking manual check
+				for (String s : results) {
+					if (s.startsWith("question")) {
+						temp = s.substring(9, s.indexOf("_"));
+						boolean check_result = MessageDialog.openQuestion(container.getShell(), temp+ " pattern secondary context check",
+								InfoEnum.pattern_context_question.get(s));
+						try {
+							if (check_result == true) {
+								// add the context to "domain_context"
+								Inference.writeFile("dlv/context/domain_context.dl", "\n"+InfoEnum.pattern_context_question.get(s + "y"), true);
+							} else {
+								// add the negation of the context to "domain_context"
+								Inference.writeFile("dlv/context/domain_context.dl", InfoEnum.pattern_context_question.get(s + "n"), true);
+							}
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		btnCheckSecondaryContext.setBounds(356, 311, 118, 43);
+		btnCheckSecondaryContext.setText("Step 4.2: Check \nsecondary context");
+
 		/**
 		 * additional functions
 		 */
@@ -520,8 +648,8 @@ public class CommandPanel extends ApplicationWindow {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Control[] layer_list = grpRefinementMode.getChildren();
-				for(Control c: layer_list){
-					Button temp = (Button)c;
+				for (Control c : layer_list) {
+					Button temp = (Button) c;
 					if (temp.getText().equals("Exhaustive")) {
 						grpRefinementDimension.setVisible(false);
 						grpVisualization.setVisible(true);
@@ -533,8 +661,8 @@ public class CommandPanel extends ApplicationWindow {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Control[] layer_list = grpRefinementMode.getChildren();
-				for(Control c: layer_list){
-					Button temp = (Button)c;
+				for (Control c : layer_list) {
+					Button temp = (Button) c;
 					if (temp.getText().equals("One-step")) {
 						grpVisualization.setVisible(false);
 						grpRefinementDimension.setVisible(true);
@@ -542,20 +670,19 @@ public class CommandPanel extends ApplicationWindow {
 				}
 			}
 		});
-		
-		
+
 		return container;
 	}
-	
+
 	/*
 	 * Interpret commands according to current settings
 	 */
 	private String getCommand(Group grpImport) {
 		Control[] layer_list = grpImport.getChildren();
-		for(Control c: layer_list){
-			Button temp = (Button)c;
-			if(temp.getSelection()==true){
-				//layers
+		for (Control c : layer_list) {
+			Button temp = (Button) c;
+			if (temp.getSelection() == true) {
+				// layers
 				if (grpImport.getText().equals("Layer")) {
 					if (temp.getText().equals("All layers")) {
 						return InfoEnum.Layer.ALL.name();
@@ -567,7 +694,7 @@ public class CommandPanel extends ApplicationWindow {
 						return InfoEnum.Layer.PHYSICAL.name();
 					}
 				}
-				//objects
+				// objects
 				if (grpImport.getText().equals("Object")) {
 					if (temp.getText().equals("All models")) {
 						return String.valueOf(InfoEnum.ALL_MODELS);
@@ -575,7 +702,7 @@ public class CommandPanel extends ApplicationWindow {
 						return String.valueOf(InfoEnum.SELECTED_MODELS);
 					}
 				}
-				//import commands
+				// import commands
 				else if (grpImport.getText().equals("Import Source")) {
 					if (temp.getText().equals("Selected elements")) {
 						return InfoEnum.Commands.IMP_SELECTION.name();
@@ -583,7 +710,7 @@ public class CommandPanel extends ApplicationWindow {
 						return InfoEnum.Commands.IMP_FILE.name();
 					}
 				}
-				//model type commands
+				// model type commands
 				else if (grpImport.getText().equals("Model Type")) {
 					if (temp.getText().equals("Requirement model")) {
 						return InfoEnum.ModelCategory.REQUIREMENT.name();
@@ -591,15 +718,14 @@ public class CommandPanel extends ApplicationWindow {
 						return InfoEnum.ModelCategory.ACTOR.name();
 					}
 				}
-				//refinement commands
+				// refinement commands
 				else if (grpImport.getText().equals("Refinement Mode")) {
 					if (temp.getText().equals("One-step")) {
 						return InfoEnum.Commands.REF_ALL_ONE_STEP.name();
 					} else if (temp.getText().equals("Exhaustive")) {
 						return InfoEnum.Commands.REF_ALL_EXHAUSTIVE.name();
 					}
-				}
-				else if (grpImport.getText().equals("Refinement Dimension")) {
+				} else if (grpImport.getText().equals("Refinement Dimension")) {
 					if (temp.getText().equals("Attribute")) {
 						return "attribute";
 					} else if (temp.getText().equals("Asset")) {
@@ -607,15 +733,13 @@ public class CommandPanel extends ApplicationWindow {
 					} else if (temp.getText().equals("Interval")) {
 						return "interval";
 					}
-				}
-				else if (grpImport.getText().equals("Visualization")) {
+				} else if (grpImport.getText().equals("Visualization")) {
 					if (temp.getText().equals("OmniGraffle")) {
 						return String.valueOf(InfoEnum.CANVAS);
 					} else if (temp.getText().equals("Graphviz")) {
 						return String.valueOf(InfoEnum.GRAPHVIZ);
 					}
-				}
-				else{
+				} else {
 					logger.warning("Command error!");
 				}
 			}
@@ -632,6 +756,7 @@ public class CommandPanel extends ApplicationWindow {
 
 	/**
 	 * Create the menu manager.
+	 * 
 	 * @return the menu manager
 	 */
 	@Override
@@ -642,6 +767,7 @@ public class CommandPanel extends ApplicationWindow {
 
 	/**
 	 * Create the coolbar manager.
+	 * 
 	 * @return the coolbar manager
 	 */
 	@Override
@@ -652,6 +778,7 @@ public class CommandPanel extends ApplicationWindow {
 
 	/**
 	 * Create the status line manager.
+	 * 
 	 * @return the status line manager
 	 */
 	@Override
@@ -662,25 +789,25 @@ public class CommandPanel extends ApplicationWindow {
 
 	/**
 	 * Launch the application.
+	 * 
 	 * @param args
 	 */
 	public static void main(String args[]) {
 		try {
-			//first initalize the global logger
+			// first initalize the global logger
 			CommandPanel.setup();
-			//then run the graphic interface
+			// then run the graphic interface
 			final CommandPanel window = new CommandPanel();
 			window.setBlockOnOpen(true);
 			window.open();
 			Display.getCurrent().dispose();
-//			Display.getDefault().asyncExec(new Runnable() {
-//			    public void run() {
-//			    	window.open();
-//			    	Display.getCurrent().dispose();
-//			    }
-//			});
+			// Display.getDefault().asyncExec(new Runnable() {
+			// public void run() {
+			// window.open();
+			// Display.getCurrent().dispose();
+			// }
+			// });
 
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -688,6 +815,7 @@ public class CommandPanel extends ApplicationWindow {
 
 	/**
 	 * Configure the shell.
+	 * 
 	 * @param newShell
 	 */
 	@Override
@@ -701,6 +829,6 @@ public class CommandPanel extends ApplicationWindow {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(480, 682);
+		return new Point(612, 679);
 	}
 }
