@@ -34,11 +34,13 @@ import it.unitn.tlsaf.ds.SecurityGoal;
 
 /**
  * A collection of models that are involved in our analysis
- * 
+ * This is a legacy class, which is used in the GUI class to smoothly evolve the system.
+ * Further refactoring can be done to clean the code  
  * @author litong30
  */
+
+//TODO: merge this class into the CommandPanel?
 public class ModelSet {
-	
 	RequirementGraph req_bus_model;
 	RequirementGraph req_app_model;
 	RequirementGraph req_phy_model;

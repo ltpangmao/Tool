@@ -637,7 +637,7 @@ public class CommandPanel extends ApplicationWindow {
 				}
 			}
 		});
-		btnCheckSecondaryContext.setBounds(356, 311, 118, 43);
+		btnCheckSecondaryContext.setBounds(356, 311, 131, 43);
 		btnCheckSecondaryContext.setText("Step 4.2: Check \nsecondary context");
 
 		/**

@@ -1309,7 +1309,7 @@ private static void identifyTopDownBestRefinePath(RequirementGraph req_model) {
 		return encoding.decode(ByteBuffer.wrap(encoded)).toString();
 	}
 	
-	static void writeFile(String path, String content, boolean append) throws IOException {
+	public static void writeFile(String path, String content, boolean append) throws IOException {
 		PrintWriter writer = new PrintWriter(new FileWriter(path, append));
 		writer.println(content);
 		writer.close();

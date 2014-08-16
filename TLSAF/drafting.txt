@@ -1,0 +1,26 @@
+%GOAL
+test
+test again
+....
+fasjdfoj
+aifs
+
+
+%TASK
+fsfa
+fs
+df
+sd
+fs
+fs
+dfs
+df
+s
+df
+sdf
+sd
+f
+sdf
+s
+dfs
+d
